@@ -1,10 +1,10 @@
 {
-  "name": "dispensor",
+	"name": "dispensor",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --port 3000",
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
@@ -15,17 +15,18 @@
 		"test:unit": "vitest"
 	},
 	"dependencies": {
+		"@e-ration/database": "workspace:^",
 		"@repo/ui": "workspace:*"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
+		"@repo/eslint-config": "workspace:*",
 		"@sveltejs/adapter-auto": "^3.1.1",
 		"@sveltejs/kit": "^2.5.2",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@typescript-eslint/eslint-plugin": "^7.1.0",
 		"@typescript-eslint/parser": "^7.1.0",
 		"eslint": "^8.57.0",
-		"@repo/eslint-config": "workspace:*",
 		"prettier": "^3.2.5",
 		"prettier-plugin-svelte": "^3.2.2",
 		"svelte": "^4.2.12",
