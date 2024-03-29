@@ -15,6 +15,7 @@
 		"test:unit": "vitest"
 	},
 	"dependencies": {
+		"@e-ration/auth": "workspace:^",
 		"@e-ration/database": "workspace:^",
 		"@repo/ui": "workspace:*",
 		"svelte-tel-input": "^3.3.9",

@@ -1,0 +1,16 @@
+{
+    "name": "@e-ration/auth",
+    "main": "./index.ts",
+    "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "devDependencies": {
+        "@sveltejs/kit": "^2.5.2",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "firebase": "^10.9.0",
+        "zod": "^3.22.4"
+    }
+}
