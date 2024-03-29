@@ -1,5 +1,5 @@
-import { GetOTPAuthHandleConfig } from '../otp/otp.server';
-import { AuthEvent } from './types';
+import type { GetOTPAuthHandleConfig } from '../otp/otp.server';
+import type { AuthEvent } from './types';
 import { z } from 'zod';
 
 export const sessionSchema = z.object({
@@ -21,10 +21,19 @@ export function getSession<U>(event: AuthEvent, config: GetOTPAuthHandleConfig<U
   return result.data;
 }
 
-export function setSession<U>(event: AuthEvent, config: GetOTPAuthHandleConfig<U>, data: any) {
+export async function setSession<U>(
+  event: AuthEvent,
+  config: GetOTPAuthHandleConfig<U>,
+  data: any
+) {
   const result = sessionSchema.safeParse(data);
   if (result.success) {
-    event.cookies.set(config.cookie.name, JSON.stringify(result.data), config.cookie.options);
+    event.cookies.set('test-2', JSON.stringify({ hello: 'world' }), { path: '/' });
+
+    event.cookies.set(config.cookie.name, JSON.stringify(result.data), {
+      path: config.cookie.options.path
+    });
+    console.log('setted');
   } else {
     throw result.error;
   }

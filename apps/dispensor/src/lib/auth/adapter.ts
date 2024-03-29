@@ -16,7 +16,7 @@ export class AdapterFirestore extends Adapter<User> {
 		});
 		this.repository = getUserRepository();
 	}
-	getUser(uid: string): Promise<User | null> {
-		throw new Error('Method not implemented.');
+	async getUser(uid: string): Promise<User | null> {
+		return await this.repository.findById(uid);
 	}
 }

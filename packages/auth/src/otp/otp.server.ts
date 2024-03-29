@@ -1,6 +1,6 @@
-import { type Handle, redirect } from '@sveltejs/kit';
+import { type Handle, redirect, text, error } from '@sveltejs/kit';
 import { handleLoginApiRoute, handleLogoutApiRoute } from '../utils/api';
-import { getSession } from '../utils/session';
+import { getSession, sessionSchema } from '../utils/session';
 import { Adapter } from '../utils/adapter';
 import type { AuthUser } from '../utils/types';
 
@@ -41,9 +41,9 @@ export function getOTPAuthHandle<UserType extends AuthUser>(
     if (isAuthRequest) {
       switch (event.url.pathname) {
         case config.apiRoutes.login:
-          return handleLoginApiRoute<UserType>(event, config);
+          return await handleLoginApiRoute<UserType>(event, config);
         case config.apiRoutes.logout:
-          return handleLogoutApiRoute<UserType>(event, config);
+          return await handleLogoutApiRoute<UserType>(event, config);
       }
     }
 

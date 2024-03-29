@@ -1,18 +1,29 @@
-import { GetOTPAuthHandleConfig } from '../otp/otp.server';
+import type { GetOTPAuthHandleConfig } from '../otp/otp.server';
 import { sessionSchema, setSession } from './session';
-import { AuthEvent } from './types';
-import { MaybePromise, text, error } from '@sveltejs/kit';
+import type { AuthEvent } from './types';
+import { text, error } from '@sveltejs/kit';
 
 export async function handleLoginApiRoute<U>(
   event: AuthEvent,
   config: GetOTPAuthHandleConfig<U>
 ): Promise<Response> {
   const body = await event.request.json();
-  try {
-    setSession<U>(event, config, body);
-    return text('logged In');
-  } catch (err) {
-    return error(400, err);
+  const result = sessionSchema.safeParse(body);
+  if (result.success) {
+    const headers = new Headers();
+    headers.append(
+      'set-cookie',
+      event.cookies.serialize(
+        config.cookie.name,
+        JSON.stringify(result.data),
+        config.cookie.options
+      )
+    );
+    return text('Logged in', {
+      headers: headers
+    });
+  } else {
+    throw error(400, result.error);
   }
 }
 
