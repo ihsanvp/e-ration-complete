@@ -84,6 +84,9 @@ importers:
       '@e-ration/database':
         specifier: workspace:^
         version: link:../../packages/database
+      '@e-ration/hooks':
+        specifier: workspace:^
+        version: link:../../packages/hooks
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -341,6 +344,12 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
+
+  packages/hooks:
+    dependencies:
+      svelte:
+        specifier: ^4.2.12
+        version: 4.2.12
 
   packages/ui:
     devDependencies:

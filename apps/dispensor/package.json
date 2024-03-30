@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"@e-ration/database": "workspace:^",
+		"@e-ration/hooks": "workspace:^",
 		"@repo/ui": "workspace:*",
 		"firebase": "^10.9.0",
 		"firebase-admin": "^12.0.0",
