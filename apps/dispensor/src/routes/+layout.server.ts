@@ -12,6 +12,7 @@ export async function load({ locals }) {
 		};
 	}
 	return {
-		user: undefined
+		user: undefined,
+		session: undefined
 	};
 }
