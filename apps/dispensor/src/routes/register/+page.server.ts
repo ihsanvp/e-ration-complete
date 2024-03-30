@@ -1,5 +1,5 @@
 import { FIREBASE_ADMIN_KEY } from '$env/static/private';
-import { ServerAuth } from '$lib/auth/server.auth';
+import { ServerAuth } from '$lib/auth-old/server.auth';
 import { User, getUserRepository } from '@e-ration/database';
 import { error, redirect } from '@sveltejs/kit';
 import { z } from 'zod';

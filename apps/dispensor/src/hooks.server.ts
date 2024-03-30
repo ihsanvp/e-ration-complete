@@ -1,7 +1,26 @@
-import { FIREBASE_ADMIN_KEY } from '$env/static/private';
-import { PUBLIC_FIREBASE_PROJECT_ID } from '$env/static/public';
-import { AdapterFirestore } from '$lib/auth/adapter';
 import { AuthConfig } from '$lib/auth/config.auth';
-import { ServerAuth } from '$lib/auth/server.auth';
+import { getSession } from '$lib/auth/session.auth';
+import { isProtectedRoute } from '$lib/auth/utils.auth';
+import { initializeDatabase } from '$lib/utils/db';
+import { getUserRepository } from '@e-ration/database';
+import { redirect } from '@sveltejs/kit';
 
-export const handle = ServerAuth.handle;
+/** @type {import("@sveltejs/kit").Handle} */
+export async function handle({ event, resolve }) {
+	if (isProtectedRoute(event, AuthConfig.excludeRoutes)) {
+		initializeDatabase();
+		const session = getSession(event, AuthConfig);
+		if (!session) {
+			throw redirect(307, '/login');
+		}
+		event.locals.session = session;
+		const user = await getUserRepository().findById(session.uid);
+		if (!user) {
+			if (event.url.pathname != '/register') {
+				throw redirect(307, '/register');
+			}
+		}
+		event.locals.user = user.toJson();
+	}
+	return resolve(event);
+}

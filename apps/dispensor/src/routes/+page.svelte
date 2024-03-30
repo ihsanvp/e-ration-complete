@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { AuthClient } from '$lib/auth/client.auth';
+	import { logout } from '$lib/auth/actions.auth';
 	import { MyCounterButton } from '@repo/ui';
 
 	async function logo() {
 		console.log('ookk');
-		// await AuthClient.logout();
+		await logout();
 	}
 </script>
 

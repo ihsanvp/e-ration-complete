@@ -15,9 +15,10 @@
 		"test:unit": "vitest"
 	},
 	"dependencies": {
-		"@e-ration/auth": "workspace:^",
 		"@e-ration/database": "workspace:^",
 		"@repo/ui": "workspace:*",
+		"firebase": "^10.9.0",
+		"firebase-admin": "^12.0.0",
 		"svelte-tel-input": "^3.3.9",
 		"zod": "^3.22.4"
 	},

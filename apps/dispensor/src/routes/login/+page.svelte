@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { AuthClient } from '$lib/auth/client.auth';
+	import { createCaptcha, loginWithOTP, resetCaptcha, sendOTP } from '$lib/auth/actions.auth';
 	import Header from '$lib/components/Header.svelte';
 	import SendOtpForm from '$lib/components/SendOTPForm.svelte';
 	import VerifyOtpForm from '$lib/components/VerifyOTPForm.svelte';
 	import { CAPTCHA_ELEMENT_ID } from '$lib/utils/constants';
-	import type { ConfirmationResult, RecaptchaVerifier } from '@e-ration/auth';
+	import type { ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
 	import { onMount } from 'svelte';
 
 	enum LoginView {
@@ -23,18 +23,14 @@
 		view = nextView;
 	}
 
-	function redirectToHome() {
-		window.location.href = window.location.href.replace($page.url.pathname, '/');
-	}
-
 	async function onSend(e: CustomEvent<string>) {
 		try {
 			isSendingOTP = true;
-			confirmation = await AuthClient.sendOTP(captcha, e.detail);
+			confirmation = await sendOTP(captcha, e.detail);
 			changeView(LoginView.VERIFY);
 		} catch (err) {
 			console.log(err);
-			captcha = AuthClient.resetCaptcha(captcha, CAPTCHA_ELEMENT_ID);
+			captcha = resetCaptcha(captcha, CAPTCHA_ELEMENT_ID);
 		} finally {
 			isSendingOTP = false;
 		}
@@ -43,17 +39,15 @@
 	async function onVerify(e: CustomEvent<string>) {
 		try {
 			isVerifyingOTP = true;
-			await AuthClient.confirmOTP(confirmation, e.detail);
-			// redirectToHome();
+			await loginWithOTP(confirmation, e.detail);
 		} catch (err) {
 			console.log(err);
-		} finally {
 			isVerifyingOTP = false;
 		}
 	}
 
 	onMount(() => {
-		captcha = AuthClient.createCaptcha(CAPTCHA_ELEMENT_ID);
+		captcha = createCaptcha(CAPTCHA_ELEMENT_ID);
 	});
 </script>
 
