@@ -1,6 +1,6 @@
 import { Collection } from 'fireorm';
 
-type ItemCreate = Pick<Item, 'name' | 'unit'>;
+type ItemCreate = Omit<Item, 'id'>;
 
 @Collection()
 export class Item {
@@ -8,7 +8,7 @@ export class Item {
   name!: string;
   unit!: string;
 
-  static new(data: ItemCreate) {
+  static new(data: ItemCreate): Item {
     const item = new Item();
     item.name = data.name;
     item.unit = data.unit;

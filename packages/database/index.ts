@@ -1,5 +1,5 @@
 export { Item } from './src/models/item';
-export { User } from './src/models/user';
+export { User, type IUser } from './src/models/user';
 
 export { getItemRepository } from './src/repositories/item.repository';
 export { getUserRepository, UserRepository } from './src/repositories/user.repository';

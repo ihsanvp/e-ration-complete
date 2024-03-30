@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { AuthClient } from '$lib/auth/client.auth';
 	import { MyCounterButton } from '@repo/ui';
 </script>
 

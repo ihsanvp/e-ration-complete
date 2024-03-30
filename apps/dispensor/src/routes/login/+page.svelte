@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { confirmOTP, createCaptcha, resetCaptcha, sendOTP } from '$lib/auth/client.auth';
+	import { AuthClient } from '$lib/auth/client.auth';
 	import Header from '$lib/components/Header.svelte';
 	import SendOtpForm from '$lib/components/SendOTPForm.svelte';
 	import VerifyOtpForm from '$lib/components/VerifyOTPForm.svelte';
@@ -30,11 +30,11 @@
 	async function onSend(e: CustomEvent<string>) {
 		try {
 			isSendingOTP = true;
-			confirmation = await sendOTP(captcha, e.detail);
+			confirmation = await AuthClient.sendOTP(captcha, e.detail);
 			changeView(LoginView.VERIFY);
 		} catch (err) {
 			console.log(err);
-			captcha = resetCaptcha(captcha, CAPTCHA_ELEMENT_ID);
+			captcha = AuthClient.resetCaptcha(captcha, CAPTCHA_ELEMENT_ID);
 		} finally {
 			isSendingOTP = false;
 		}
@@ -43,7 +43,7 @@
 	async function onVerify(e: CustomEvent<string>) {
 		try {
 			isVerifyingOTP = true;
-			await confirmOTP(confirmation, e.detail);
+			await AuthClient.confirmOTP(confirmation, e.detail);
 			// redirectToHome();
 		} catch (err) {
 			console.log(err);
@@ -53,7 +53,7 @@
 	}
 
 	onMount(() => {
-		captcha = createCaptcha(CAPTCHA_ELEMENT_ID);
+		captcha = AuthClient.createCaptcha(CAPTCHA_ELEMENT_ID);
 	});
 </script>
 
