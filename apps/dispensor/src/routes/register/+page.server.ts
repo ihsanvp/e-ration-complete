@@ -25,7 +25,7 @@ export const actions = {
 			return error(401, 'Unauthorized');
 		}
 		const repo = getUserRepository();
-		const user = User.new({
+		const user = User.fromJson({
 			id: session.uid,
 			name: parsedData.name,
 			location: parsedData.location,

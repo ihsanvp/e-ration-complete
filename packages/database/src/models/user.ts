@@ -23,7 +23,7 @@ export class User implements IUser {
     };
   }
 
-  static new(data: IUser): User {
+  static fromJson(data: IUser): User {
     const user = new User();
     user.id = data.id;
     user.name = data.name;

@@ -2,19 +2,19 @@ import { type ConfirmationResult, RecaptchaVerifier, signInWithPhoneNumber } fro
 import { type FirebaseConfig, getFirebaseAuth } from '../utils/firebase';
 import { getContext, hasContext, setContext } from 'svelte';
 import type { Session } from '../..';
+import { type ApiRoutes } from './otp.server';
 
-interface GetOTPClientAuthConfig {
+interface GetOTPClientAuthConfig<UserType, UserCreateData extends {}> {
   firebase: FirebaseConfig;
-  apiRoutes: {
-    login: string;
-    logout: string;
-  };
+  apiRoutes: ApiRoutes<UserCreateData>;
 }
 
 const AUTH_CONTEXT_KEY = 'context__auth';
 const SESSION_CONTEXT_KEY = 'context__session';
 
-export function getOTPClientAuth<UserType>(config: GetOTPClientAuthConfig) {
+export function getOTPClientAuth<UserType, UserCreateData extends {}>(
+  config: GetOTPClientAuthConfig<UserType, UserCreateData>
+) {
   function createCaptcha(id: string) {
     const auth = getFirebaseAuth(config.firebase);
     return new RecaptchaVerifier(auth, id, {
@@ -35,7 +35,7 @@ export function getOTPClientAuth<UserType>(config: GetOTPClientAuthConfig) {
 
   async function confirmOTP(confirmation: ConfirmationResult, otp: string) {
     const result = await confirmation.confirm(otp);
-    await fetch(config.apiRoutes.login, {
+    await fetch(config.apiRoutes.login.path, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -71,6 +71,13 @@ export function getOTPClientAuth<UserType>(config: GetOTPClientAuthConfig) {
     }
   }
 
+  async function logout() {
+    console.log('ok');
+    await fetch(config.apiRoutes.logout.path, {
+      method: 'POST'
+    });
+  }
+
   return {
     createCaptcha,
     resetCaptcha,
@@ -79,6 +86,7 @@ export function getOTPClientAuth<UserType>(config: GetOTPClientAuthConfig) {
     createAuthContext,
     createSessionContext,
     useAuth,
-    useSession
+    useSession,
+    logout
   };
 }

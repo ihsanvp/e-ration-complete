@@ -1,18 +1,27 @@
 import { type Handle, redirect, text, error } from '@sveltejs/kit';
-import { handleLoginApiRoute, handleLogoutApiRoute } from '../utils/api';
+import { handleLoginApiRoute, handleLogoutApiRoute, handleRegisterApiRoute } from '../utils/api';
 import { getSession, sessionSchema } from '../utils/session';
 import { Adapter } from '../utils/adapter';
 import type { AuthEvent, AuthUser } from '../utils/types';
 import { getFirebaseAuth, type FirebaseConfig, getFirebaseAdminAuth } from '../utils/firebase';
+import type { AnyZodObject, ZodObject } from 'zod';
 
-export interface GetOTPAuthHandleConfig<UserType> {
+type ApiRoute<D extends {}> = {
+  path: string;
+  schema?: ZodObject<D>;
+};
+
+export interface ApiRoutes<D extends {}> {
+  login: ApiRoute<{}>;
+  register: ApiRoute<{}>;
+  logout: ApiRoute<D>;
+}
+
+export interface GetOTPAuthHandleConfig<UserType, UserCreateData extends {}> {
   excludeRoutes: string[];
-  adapter: Adapter<UserType>;
+  adapter: Adapter<UserType, UserCreateData>;
   firebase: FirebaseConfig;
-  apiRoutes: {
-    login: string;
-    logout: string;
-  };
+  apiRoutes: ApiRoutes<UserCreateData>;
   redirects: {
     notAuthenticated: string;
     noUser: string;
@@ -29,24 +38,28 @@ export interface GetOTPAuthHandleConfig<UserType> {
   };
 }
 
-export function getOTPServerAuth<UserType extends AuthUser>(
-  config: GetOTPAuthHandleConfig<UserType>
+export function getOTPServerAuth<UserType extends AuthUser, UserCreateData extends {}>(
+  config: GetOTPAuthHandleConfig<UserType, UserCreateData>
 ) {
-  config.excludeRoutes.push(...Object.values(config.apiRoutes));
+  config.excludeRoutes.push(...Object.values(config.apiRoutes).map((v) => v.path));
   config.excludeRoutes.push(config.redirects.notAuthenticated);
   config.excludeRoutes = Array.from(new Set(config.excludeRoutes));
 
   const handle: Handle = async ({ event, resolve }) => {
-    const isRouteMatch = Object.values(config.apiRoutes).includes(event.url.pathname);
+    const isRouteMatch = Object.values(config.apiRoutes)
+      .map((v) => v.path)
+      .includes(event.url.pathname);
     const isPostRequest = event.request.method == 'POST';
     const isAuthRequest = isRouteMatch && isPostRequest;
 
     if (isAuthRequest) {
       switch (event.url.pathname) {
-        case config.apiRoutes.login:
-          return await handleLoginApiRoute<UserType>(event, config);
-        case config.apiRoutes.logout:
-          return await handleLogoutApiRoute<UserType>(event, config);
+        case config.apiRoutes.login.path:
+          return await handleLoginApiRoute<UserType, UserCreateData>(event, config);
+        case config.apiRoutes.register.path:
+          return await handleRegisterApiRoute<UserType, UserCreateData>(event, config);
+        case config.apiRoutes.logout.path:
+          return await handleLogoutApiRoute<UserType, UserCreateData>(event, config);
       }
     }
     const isProtectedRequest = !config.excludeRoutes.includes(event.url.pathname);

@@ -7,12 +7,27 @@ import {
 	PUBLIC_FIREBASE_PROJECT_ID,
 	PUBLIC_FIREBASE_STORAGE_BUCKET
 } from '$env/static/public';
+import { z } from 'zod';
+
+const registerSchema = z.object({
+	name: z.string(),
+	location: z.string()
+});
+export type RegisterData = z.infer<typeof registerSchema>;
 
 export const AuthConfig = {
 	excludeRoutes: [],
 	apiRoutes: {
-		login: '/api/auth/login',
-		logout: '/api/auth/logout'
+		login: {
+			path: '/api/auth/login'
+		},
+		logout: {
+			path: '/api/auth/logout'
+		},
+		register: {
+			path: '/api/auth/register',
+			schema: registerSchema
+		}
 	},
 	redirects: {
 		notAuthenticated: '/login',
