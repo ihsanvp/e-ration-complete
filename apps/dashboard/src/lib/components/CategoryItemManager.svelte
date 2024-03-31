@@ -5,17 +5,52 @@
 	import Switch from './Switch.svelte';
 	import Spinner from './Spinner.svelte';
 	import type { ApiGetResult } from '$lib/utils/types';
+	import type {
+		QueryObserverSuccessResult,
+		UseQueriesResult,
+		UseQueryResult
+	} from '@sveltestack/svelte-query';
+	import { onMount } from 'svelte';
 
-	let selected: CategoryItemJson[] = [];
+	interface ManagerItem extends ItemJson {
+		quantity: number;
+		selected: boolean;
+	}
+
+	export let initial: CategoryItemJson[] | undefined = undefined;
 
 	const query = useCompleteData<ApiGetResult<ItemJson>>({
 		key: 'items-all',
 		endpoint: '/api/items'
 	});
 
-	$: items = $query.isSuccess
-		? $query.data.data.map((item) => ({ ...item, quantity: 0, selected: false }))
-		: [];
+	function initialize(
+		init: CategoryItemJson[] | undefined,
+		q: UseQueryResult<ApiGetResult<ItemJson>, Error>
+	): ManagerItem[] {
+		if (q.isSuccess) {
+			if (init) {
+				return q.data.data.map((item) => {
+					const matched = init.find((i) => i.id == item.id);
+					if (matched) {
+						return { ...item, quantity: matched.quantity, selected: true };
+					}
+					return { ...item, quantity: 0, selected: false };
+				});
+			} else {
+				return q.data.data.map((item) => ({ ...item, quantity: 0, selected: false }));
+			}
+		}
+		return [];
+	}
+
+	$: items = initialize(initial, $query);
+
+	onMount(() => {
+		if (!initial) {
+			$query.refetch();
+		}
+	});
 
 	const {
 		elements: { menu, input, option, label },
@@ -84,7 +119,7 @@
 					<p class="capitalize">{item.unit}</p>
 				</div>
 				<div class="flex items-center justify-end col-span-1">
-					<Switch on:change={(e) => handleSwitchChange(item, e.detail)} />
+					<Switch value={item.selected} on:change={(e) => handleSwitchChange(item, e.detail)} />
 				</div>
 			</div>
 		{/each}

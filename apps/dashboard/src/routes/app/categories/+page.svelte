@@ -1,15 +1,27 @@
 <script lang="ts">
-	import AddCategory from '$lib/components/AddCategory.svelte';
+	import ActionDialog from '$lib/components/ActionDialog.svelte';
+	import AddButton from '$lib/components/AddButton.svelte';
 	import CategoryCard from '$lib/components/CategoryCard.svelte';
+	import CategoryForm from '$lib/components/CategoryForm.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import type { ApiGetResult } from '$lib/utils/types';
-	import type { CategoryJson } from '@e-ration/database';
-	import { useInfiniteData } from '@e-ration/hooks';
+	import type { CategoryItemJson, CategoryJson } from '@e-ration/database';
+	import { useAddData, useInfiniteData } from '@e-ration/hooks';
+
+	interface InputData {
+		name: string;
+		items: CategoryItemJson[];
+	}
 
 	const query = useInfiniteData<ApiGetResult<CategoryJson>>({
 		key: 'categories',
 		endpoint: '/api/categories',
 		limit: 10
+	});
+
+	const addCategory = useAddData<InputData, CategoryJson>({
+		endpoint: '/api/categories',
+		invalidateKeys: ['categories']
 	});
 </script>
 
@@ -25,7 +37,18 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<AddCategory />
+		<ActionDialog
+			titleName="Category"
+			isLoading={$addCategory.isLoading}
+			isError={$addCategory.isError}
+			isSuccess={$addCategory.isSuccess}
+			error={$addCategory.error}
+			let:close
+			on:close={$addCategory.reset}
+		>
+			<AddButton slot="trigger" let:open onClick={open} />
+			<CategoryForm on:cancel={close} on:submit={(e) => $addCategory.mutate(e.detail)} />
+		</ActionDialog>
 	</div>
 	<div class="grid grid-cols-6 border-b sticky px-5 py-5 bg-white top-36 items-center">
 		<div class="text-lg font-medium col-span-3">Name</div>
@@ -35,7 +58,6 @@
 		{#each $query.data.pages as page}
 			{#each page.data as category}
 				<CategoryCard data={category} />
-				<!-- <ItemCard data={item} on:delete={onDeleteItem} /> -->
 			{/each}
 		{/each}
 	</div>

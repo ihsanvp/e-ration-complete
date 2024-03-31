@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { createSwitch, melt } from '@melt-ui/svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+
+	export let value: boolean = false;
 
 	const dispatch = createEventDispatcher();
 	const {
 		elements: { root, input },
 		states: { checked }
 	} = createSwitch();
+
+	onMount(() => {
+		$checked = value;
+	});
 
 	$: dispatch('change', $checked);
 </script>
