@@ -6,12 +6,11 @@
 	import ItemCard from '$lib/components/ItemCard.svelte';
 	import DeleteItemDialog from '$lib/components/DeleteItemDialog.svelte';
 	import { useItems } from '$lib/queries/useItems';
-	import { useInfiniteData } from '@e-ration/hooks';
+	import { useAddData, useInfiniteData } from '@e-ration/hooks';
 	import type { ApiGetAllResult } from '$lib/utils/types';
 
 	let deleteItemDialog: DeleteItemDialog;
 
-	const addItem = useAddItem();
 	const query = useInfiniteData<ApiGetAllResult<ItemJson>>({
 		key: 'items',
 		url: '/api/items',
@@ -19,7 +18,7 @@
 	});
 
 	function onDeleteItem(e: CustomEvent<ItemJson>) {
-		deleteItemDialog.start(e.detail);
+		deleteItemDialog.open(e.detail);
 	}
 </script>
 
@@ -35,7 +34,7 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<AddItemDialog action={addItem} />
+		<AddItemDialog />
 	</div>
 	<div class="grid grid-cols-6 border-b sticky px-5 py-5 bg-white top-36 items-center">
 		<div class="text-lg font-medium col-span-3">Name</div>

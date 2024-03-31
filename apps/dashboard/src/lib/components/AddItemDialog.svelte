@@ -3,11 +3,21 @@
 	import Icon from '@iconify/svelte';
 	import Spinner from './Spinner.svelte';
 	import type { AddItemMutation } from '$lib/mutations/useAddItem';
+	import { useAddData } from '@e-ration/hooks';
+	import type { ItemJson } from '@e-ration/database';
 
-	export let action: AddItemMutation;
+	interface AddItemData {
+		name: string;
+		unit: string;
+	}
 
 	let name: string;
 	let unit: string;
+
+	const action = useAddData<AddItemData, ItemJson>({
+		url: '/api/items',
+		invalidateKeys: ['items']
+	});
 
 	const {
 		elements: { trigger, portalled, overlay, content, title, description, close },

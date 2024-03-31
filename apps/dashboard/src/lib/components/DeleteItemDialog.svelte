@@ -11,15 +11,15 @@
 
 	const {
 		elements: { trigger, portalled, overlay, content, title, description, close },
-		states: { open }
+		states: { open: show }
 	} = createDialog({
 		role: 'alertdialog',
 		closeOnOutsideClick: false
 	});
 
-	export function start(item: ItemJson) {
+	export function open(item: ItemJson) {
 		data = item;
-		$open = true;
+		$show = true;
 	}
 
 	const queryClient = useQueryClient();
@@ -36,13 +36,13 @@
 	);
 
 	function closeModal() {
-		$open = false;
+		$show = false;
 		$mutation.reset();
 	}
 </script>
 
 <div use:melt={$portalled}>
-	{#if $open}
+	{#if $show}
 		<div class="fixed inset-0 z-50 backdrop-blur-sm bg-black/20" use:melt={$overlay} />
 		<div
 			class="fixed flex flex-col bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] w-[90vw] z-50 border border-white rounded-md p-5"
