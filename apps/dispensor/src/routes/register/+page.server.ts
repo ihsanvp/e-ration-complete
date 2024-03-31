@@ -1,5 +1,7 @@
 import { FIREBASE_ADMIN_KEY } from '$env/static/private';
-import { ServerAuth } from '$lib/auth-old/server.auth';
+import { AuthConfig } from '$lib/auth/config.auth.js';
+import { getSession } from '$lib/auth/session.auth.js';
+import { getFirebaseAdminAuth } from '$lib/firebase/firebase.admin.js';
 import { User, getUserRepository } from '@e-ration/database';
 import { error, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -16,11 +18,12 @@ export const actions = {
 		const name = data.get('name');
 		const location = data.get('location');
 		const parsedData = schema.parse({ name, location });
-		const session = ServerAuth.getServerSession(event);
+		const session = getSession(event, AuthConfig);
 		if (!session) {
 			return error(401, 'Unauthorized');
 		}
-		const firebaseUser = await ServerAuth.getFirebaseUser(event, FIREBASE_ADMIN_KEY);
+		const auth = getFirebaseAdminAuth();
+		const firebaseUser = await auth.getUser(session.uid);
 		if (!firebaseUser) {
 			return error(401, 'Unauthorized');
 		}

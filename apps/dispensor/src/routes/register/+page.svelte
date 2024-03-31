@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { AuthClient } from '$lib/auth-old/client.auth';
 
 	/** @type {import('./$types').ActionData} */
 	export let form;

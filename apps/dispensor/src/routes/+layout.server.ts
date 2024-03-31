@@ -4,10 +4,8 @@ import { getUserRepository } from '@e-ration/database';
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ locals }) {
 	if (locals.session) {
-		initializeDatabase();
-		const user = await getUserRepository().findById(locals.session.uid);
 		return {
-			user: user.toJson(),
+			user: locals.user,
 			session: locals.session
 		};
 	}

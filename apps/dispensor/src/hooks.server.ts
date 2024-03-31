@@ -15,12 +15,14 @@ export async function handle({ event, resolve }) {
 		}
 		event.locals.session = session;
 		const user = await getUserRepository().findById(session.uid);
+		if (user) {
+			event.locals.user = user.toJson();
+		}
 		if (!user) {
 			if (event.url.pathname != '/register') {
 				throw redirect(307, '/register');
 			}
 		}
-		event.locals.user = user.toJson();
 	}
 	return resolve(event);
 }
