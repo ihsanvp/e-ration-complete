@@ -13,17 +13,14 @@ export async function handle({ event, resolve }) {
 		if (!session) {
 			throw redirect(307, '/login');
 		}
-		event.locals.session = session;
 		const auth = getFirebaseAdminAuth();
 		const user = await auth.getUser(session.uid);
 		if (!user) {
-			event.locals.session = undefined;
 			event.cookies.delete(AuthConfig.cookie.name, AuthConfig.cookie.options);
 			throw redirect(307, '/login');
 		}
 		const isAdmin = (user.customClaims && user.customClaims['admin'] == true) || false;
 		if (!isAdmin) {
-			event.locals.session = undefined;
 			event.cookies.delete(AuthConfig.cookie.name, AuthConfig.cookie.options);
 			return redirect(307, '/login');
 		}
