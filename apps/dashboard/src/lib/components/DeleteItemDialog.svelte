@@ -3,11 +3,11 @@
 	import Icon from '@iconify/svelte';
 	import { useQueryClient, useMutation } from '@sveltestack/svelte-query';
 	import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
-	import { getFirestoreApp } from '$lib/firebase/firestore.client';
-	import type { Item, ItemData } from '$lib/models/items.models';
 	import Spinner from './Spinner.svelte';
+	import type { ItemJson } from '@e-ration/database';
+	import { ItemService } from '$lib/services/item.service';
 
-	let data: Item;
+	let data: ItemJson;
 
 	const {
 		elements: { trigger, portalled, overlay, content, title, description, close },
@@ -17,21 +17,20 @@
 		closeOnOutsideClick: false
 	});
 
-	export function start(item: Item) {
+	export function start(item: ItemJson) {
 		data = item;
 		$open = true;
 	}
 
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<void, Error, Item>(
+	const mutation = useMutation<void, Error, ItemJson>(
 		async (item) => {
-			await deleteDoc(doc(getFirestoreApp(), 'items', item.id));
+			await ItemService.remove(item.id);
 		},
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries('items');
-				queryClient.invalidateQueries('users');
 			}
 		}
 	);
@@ -89,10 +88,6 @@
 			<div class="flex items-center justify-between">
 				<span>Unit</span>
 				<span>{data.unit}</span>
-			</div>
-			<div class="flex items-center justify-between">
-				<span>Max Quantity</span>
-				<span>{data.max_quantity}</span>
 			</div>
 			<div class="grid grid-cols-2 items-center gap-5 mt-5">
 				<button class="bg-gray-200 py-3 text-sm rounded-md" type="button" use:melt={$close}

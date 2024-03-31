@@ -1,4 +1,4 @@
-export { Item } from './src/models/item';
+export { Item, ItemJson } from './src/models/item';
 export { User, type IUser } from './src/models/user';
 export { Category, ICategory, CategoryItem } from './src/models/category';
 

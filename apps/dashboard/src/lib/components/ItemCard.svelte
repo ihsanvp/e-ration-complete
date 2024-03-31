@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Item } from '@e-ration/database';
+	import type { Item, ItemJson } from '@e-ration/database';
 	import Icon from '@iconify/svelte';
 	import { createDropdownMenu, melt } from '@melt-ui/svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	export let data: Item;
+	export let data: ItemJson;
 	const dispatch = createEventDispatcher();
 
 	const {
@@ -24,10 +24,10 @@
 <button
 	type="button"
 	use:melt={$trigger}
-	class="grid grid-cols-8 p-3 border rounded-md items-center"
+	class="grid grid-cols-6 p-3 border rounded-md items-center"
 >
-	<div class="col-span-4 flex items-start">{data.name}</div>
-	<div class="col-span-1 flex justify-end capitalize">{data.unit}</div>
+	<div class="col-span-3 flex items-start capitalize">{data.name}</div>
+	<div class="col-span-2 flex capitalize">{data.unit}</div>
 	<div class="col-span-1 flex justify-end items-center">
 		<Icon icon="mi:options-vertical" />
 	</div>
