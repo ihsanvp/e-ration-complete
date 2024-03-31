@@ -6,13 +6,21 @@ import { z } from 'zod';
 
 /** @type {import("./$types").RequestHandler} */
 export async function GET({ url }) {
-	const LIMIT = getPaginationLimit(url.searchParams);
-	const items = await getItemRepository().paginate({
-		orderBy: 'created',
-		limit: LIMIT,
-		cursor: url.searchParams.get('cursor')
-	});
-	const cursor = items.length == LIMIT ? items[items.length - 1].id : undefined;
+	initializeDatabase();
+	let items: Item[];
+	let cursor: string | undefined;
+	const limit = getPaginationLimit(url.searchParams);
+	const repo = getItemRepository();
+	if (limit) {
+		items = await repo.paginate({
+			orderBy: 'created',
+			limit: limit,
+			cursor: url.searchParams.get('cursor')
+		});
+		cursor = items.length == limit ? items[items.length - 1].id : undefined;
+	} else {
+		items = await repo.orderByAscending('created').find();
+	}
 	return json({
 		cursor: cursor,
 		data: items.map((i) => i.toJson())

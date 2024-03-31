@@ -1,8 +1,17 @@
 import { Collection, ISubCollection, SubCollection } from 'fireorm';
 
-export interface ICategory {
+export interface CategoryJson {
   id: string;
   name: string;
+  created: string;
+  items?: Array<CategoryItem>;
+}
+
+export interface CategoryItemJson {
+  id: string;
+  name: string;
+  unit: string;
+  quantity: number;
 }
 
 export class CategoryItem {
@@ -12,15 +21,8 @@ export class CategoryItem {
   quantity!: number;
 }
 
-export interface CategoryJson {
-  id: string;
-  name: string;
-  created: string;
-  items?: Array<CategoryItem>;
-}
-
 @Collection()
-export class Category implements ICategory {
+export class Category {
   id!: string;
   name!: string;
   created!: Date;

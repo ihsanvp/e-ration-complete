@@ -1,4 +1,4 @@
-export interface ApiGetAllResult<T> {
+export interface ApiGetResult<T> {
 	data: T[];
 	cursor?: string;
 }

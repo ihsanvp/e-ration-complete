@@ -1,6 +1,11 @@
-export { Item, ItemJson } from './src/models/item';
+export { Item, type ItemJson } from './src/models/item';
 export { User, type IUser } from './src/models/user';
-export { Category, CategoryJson } from './src/models/category';
+export {
+  Category,
+  CategoryItem,
+  type CategoryJson,
+  type CategoryItemJson
+} from './src/models/category';
 
 export { getItemRepository } from './src/repositories/item.repository';
 export { getUserRepository, UserRepository } from './src/repositories/user.repository';

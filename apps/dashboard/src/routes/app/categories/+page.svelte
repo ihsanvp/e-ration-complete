@@ -1,10 +1,11 @@
 <script lang="ts">
+	import AddCategory from '$lib/components/AddCategory.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import type { ApiGetAllResult } from '$lib/utils/types';
+	import type { ApiGetResult } from '$lib/utils/types';
 	import type { CategoryJson } from '@e-ration/database';
 	import { useInfiniteData } from '@e-ration/hooks';
 
-	const query = useInfiniteData<ApiGetAllResult<CategoryJson>>({
+	const query = useInfiniteData<ApiGetResult<CategoryJson>>({
 		key: 'categories',
 		endpoint: '/api/categories',
 		limit: 10
@@ -23,7 +24,7 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<!-- <AddItemDialog action={addItem} /> -->
+		<AddCategory />
 	</div>
 	<div class="grid grid-cols-6 border-b sticky px-5 py-5 bg-white top-36 items-center">
 		<div class="text-lg font-medium col-span-3">Name</div>

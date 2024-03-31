@@ -1,22 +1,18 @@
 <script lang="ts">
 	import { createDialog, melt } from '@melt-ui/svelte';
 	import Icon from '@iconify/svelte';
-	import Spinner from './Spinner.svelte';
 	import { useAddData } from '@e-ration/hooks';
-	import type { ItemJson } from '@e-ration/database';
+	import Spinner from './Spinner.svelte';
+	import type { CategoryItemJson, CategoryJson } from '@e-ration/database';
+	import CategoryItemManager from './CategoryItemManager.svelte';
 
-	interface AddItemData {
-		name: string;
-		unit: string;
-	}
-
+	let categoryItemsManager: CategoryItemManager;
 	let name: string;
-	let unit: string;
 
-	const action = useAddData<AddItemData, ItemJson>({
-		endpoint: '/api/items',
-		invalidateKeys: ['items']
-	});
+	interface InputData {
+		name: string;
+		items: CategoryItemJson[];
+	}
 
 	const {
 		elements: { trigger, portalled, overlay, content, title, description, close },
@@ -26,18 +22,22 @@
 		closeOnOutsideClick: false
 	});
 
+	const action = useAddData<InputData, CategoryJson>({
+		endpoint: '/api/categories',
+		invalidateKeys: ['categories']
+	});
+
 	function closeModal() {
 		$open = false;
 		name = '';
-		unit = '';
 		$action.reset();
 	}
 
 	function onSubmit() {
-		if (name && unit) {
+		if (name) {
 			$action.mutate({
-				name: name.toLowerCase(),
-				unit: unit.toLowerCase()
+				name,
+				items: categoryItemsManager.getData()
 			});
 		}
 	}
@@ -77,7 +77,7 @@
 				<div class="absolute inset-0 z-50 bg-white flex flex-col items-center justify-center">
 					<div class="flex-1 flex flex-col items-center justify-center p-5">
 						<div class="text-2xl font-medium">Success</div>
-						<div>New Item ({$action.data?.name}) added</div>
+						<div>New Category ({$action.data?.name}) added</div>
 					</div>
 					<div class="p-5">
 						<button on:click={closeModal} class="bg-black text-white px-10 py-3 text-sm rounded-md"
@@ -86,41 +86,26 @@
 					</div>
 				</div>
 			{/if}
-			<h2 use:melt={$title} class="text-xl font-medium p-5 text-center">Add new Item</h2>
-			<form class="p-5 flex flex-col gap-5" on:submit|preventDefault={onSubmit}>
+			<h2 use:melt={$title} class="text-xl font-medium p-5 text-center">Create new Category</h2>
+			<form class="p-5 flex flex-col gap-5 overflow-y-scroll" on:submit|preventDefault={onSubmit}>
 				<label for="add-item__name">
 					<p class="mb-2">Name</p>
 					<input
-						bind:value={name}
 						required
+						bind:value={name}
 						class="w-full rounded-md"
 						type="text"
 						id="add-item__name"
 					/>
 				</label>
-				<label for="add-item__unit">
-					<p class="mb-2">Unit</p>
-					<input
-						bind:value={unit}
-						required
-						class="w-full rounded-md"
-						type="text"
-						id="add-item__unit"
-					/>
-				</label>
+				<CategoryItemManager bind:this={categoryItemsManager} />
 				<div class="grid grid-cols-2 items-center gap-5 mt-5">
-					<button class="bg-gray-200 py-3 text-sm rounded-md" type="button" use:melt={$close}
+					<button class="bg-gray-200 py-3 text-sm rounded-md" type="button" on:click={closeModal}
 						>Cancel</button
 					>
-					<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Add</button>
+					<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Create</button>
 				</div>
 			</form>
 		</div>
 	{/if}
 </div>
-
-<style>
-	.btndisabled {
-		@apply opacity-30;
-	}
-</style>

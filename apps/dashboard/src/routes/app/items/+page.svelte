@@ -5,11 +5,11 @@
 	import ItemCard from '$lib/components/ItemCard.svelte';
 	import DeleteItemDialog from '$lib/components/DeleteItemDialog.svelte';
 	import { useInfiniteData } from '@e-ration/hooks';
-	import type { ApiGetAllResult } from '$lib/utils/types';
+	import type { ApiGetResult } from '$lib/utils/types';
 
 	let deleteItemDialog: DeleteItemDialog;
 
-	const query = useInfiniteData<ApiGetAllResult<ItemJson>>({
+	const query = useInfiniteData<ApiGetResult<ItemJson>>({
 		key: 'items',
 		endpoint: '/api/items',
 		limit: 10
