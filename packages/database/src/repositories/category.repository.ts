@@ -28,6 +28,7 @@ export class CategoryRepository extends BaseFirestoreRepository<Category> {
     let category = new Category();
     category.id = `category__${data.name}`;
     category.name = data.name;
+    category.created = new Date();
     category = await getCategoryRepository().create(category);
     const batch = category.items.createBatch();
     data.items.forEach((item) => batch.create(item));

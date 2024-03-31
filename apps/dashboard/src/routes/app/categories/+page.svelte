@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AddCategory from '$lib/components/AddCategory.svelte';
+	import CategoryCard from '$lib/components/CategoryCard.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import type { ApiGetResult } from '$lib/utils/types';
 	import type { CategoryJson } from '@e-ration/database';
@@ -33,7 +34,7 @@
 	<div class="flex flex-col gap-5 p-3">
 		{#each $query.data.pages as page}
 			{#each page.data as category}
-				<div>{category.name}</div>
+				<CategoryCard data={category} />
 				<!-- <ItemCard data={item} on:delete={onDeleteItem} /> -->
 			{/each}
 		{/each}
