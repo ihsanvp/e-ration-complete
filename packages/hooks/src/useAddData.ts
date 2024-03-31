@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 
 interface Config {
-  url: string;
+  endpoint: string;
   invalidateKeys: string[];
 }
 
@@ -9,7 +9,7 @@ export function useAddData<InputDataType, ResultType>(config: Config) {
   const queryClient = useQueryClient();
   return useMutation<ResultType, Error, InputDataType>(
     async (data) => {
-      const response = await fetch(config.url, {
+      const response = await fetch(config.endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export function useAddData<InputDataType, ResultType>(config: Config) {
     },
     {
       onSuccess: () => {
-        config.invalidateKeys.forEach((key) => queryClient.invalidateQueries(key));
+        queryClient.invalidateQueries(config.invalidateKeys);
       }
     }
   );

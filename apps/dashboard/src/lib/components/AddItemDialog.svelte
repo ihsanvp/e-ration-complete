@@ -15,7 +15,7 @@
 	let unit: string;
 
 	const action = useAddData<AddItemData, ItemJson>({
-		url: '/api/items',
+		endpoint: '/api/items',
 		invalidateKeys: ['items']
 	});
 

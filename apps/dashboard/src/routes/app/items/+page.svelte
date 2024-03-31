@@ -1,19 +1,17 @@
 <script lang="ts">
 	import AddItemDialog from '$lib/components/AddItemDialog.svelte';
-	import { useAddItem } from '$lib/mutations/useAddItem';
 	import type { ItemJson } from '@e-ration/database';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import ItemCard from '$lib/components/ItemCard.svelte';
 	import DeleteItemDialog from '$lib/components/DeleteItemDialog.svelte';
-	import { useItems } from '$lib/queries/useItems';
-	import { useAddData, useInfiniteData } from '@e-ration/hooks';
+	import { useInfiniteData } from '@e-ration/hooks';
 	import type { ApiGetAllResult } from '$lib/utils/types';
 
 	let deleteItemDialog: DeleteItemDialog;
 
 	const query = useInfiniteData<ApiGetAllResult<ItemJson>>({
 		key: 'items',
-		url: '/api/items',
+		endpoint: '/api/items',
 		limit: 10
 	});
 

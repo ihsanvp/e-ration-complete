@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@sveltestack/svelte-query';
 interface Config {
   key: string;
   limit: number;
-  url: string;
+  endpoint: string;
 }
 
 interface BaseResult {
@@ -20,7 +20,7 @@ export function useInfiniteData<ResultType extends BaseResult>(config: Config) {
       if (pageParam) {
         params.append('cursor', pageParam);
       }
-      const url = `${config.url}?${params.toString()}`;
+      const url = `${config.endpoint}?${params.toString()}`;
       const response = await fetch(url);
       if (response.ok) {
         return await response.json();

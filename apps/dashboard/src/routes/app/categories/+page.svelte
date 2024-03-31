@@ -6,7 +6,7 @@
 
 	const query = useInfiniteData<ApiGetAllResult<CategoryJson>>({
 		key: 'categories',
-		url: '/api/categories',
+		endpoint: '/api/categories',
 		limit: 10
 	});
 </script>

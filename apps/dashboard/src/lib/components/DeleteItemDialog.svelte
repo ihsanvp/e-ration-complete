@@ -1,20 +1,22 @@
 <script lang="ts">
 	import { createDialog, melt } from '@melt-ui/svelte';
-	import Icon from '@iconify/svelte';
-	import { useQueryClient, useMutation } from '@sveltestack/svelte-query';
-	import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
-	import Spinner from './Spinner.svelte';
 	import type { ItemJson } from '@e-ration/database';
-	import { ItemService } from '$lib/services/item.service';
+	import { useDeleteData } from '@e-ration/hooks';
+	import Spinner from './Spinner.svelte';
 
 	let data: ItemJson;
 
 	const {
-		elements: { trigger, portalled, overlay, content, title, description, close },
+		elements: { portalled, overlay, content, title, description, close },
 		states: { open: show }
 	} = createDialog({
 		role: 'alertdialog',
 		closeOnOutsideClick: false
+	});
+
+	const action = useDeleteData({
+		endpoint: '/api/items',
+		invalidateKeys: ['items']
 	});
 
 	export function open(item: ItemJson) {
@@ -22,22 +24,9 @@
 		$show = true;
 	}
 
-	const queryClient = useQueryClient();
-
-	const mutation = useMutation<void, Error, ItemJson>(
-		async (item) => {
-			await ItemService.remove(item.id);
-		},
-		{
-			onSuccess: () => {
-				queryClient.invalidateQueries('items');
-			}
-		}
-	);
-
 	function closeModal() {
 		$show = false;
-		$mutation.reset();
+		$action.reset();
 	}
 </script>
 
@@ -48,15 +37,15 @@
 			class="fixed flex flex-col bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] w-[90vw] z-50 border border-white rounded-md p-5"
 			use:melt={$content}
 		>
-			{#if $mutation.isLoading}
+			{#if $action.isLoading}
 				<div class="absolute inset-0 z-50 bg-white flex items-center justify-center">
 					<Spinner color="black" width="3px" size="40px" />
 				</div>
-			{:else if $mutation.isError}
+			{:else if $action.isError}
 				<div class="absolute inset-0 z-50 bg-white flex flex-col items-center justify-center">
 					<div class="flex-1 flex flex-col items-center justify-center p-5">
 						<div class="text-2xl font-medium">Error</div>
-						<div>{$mutation.error?.message}</div>
+						<div>{$action.error?.message}</div>
 					</div>
 					<div class="p-5">
 						<button on:click={closeModal} class="bg-black text-white px-10 py-3 text-sm rounded-md"
@@ -64,7 +53,7 @@
 						>
 					</div>
 				</div>
-			{:else if $mutation.isSuccess}
+			{:else if $action.isSuccess}
 				<div class="absolute inset-0 z-50 bg-white flex flex-col items-center justify-center">
 					<div class="flex-1 flex flex-col items-center justify-center p-5">
 						<div class="text-2xl font-medium">Success</div>
@@ -94,7 +83,7 @@
 					>Cancel</button
 				>
 				<button
-					on:click={() => $mutation.mutate(data)}
+					on:click={() => $action.mutate(data.id)}
 					class="bg-black text-white py-3 text-sm rounded-md"
 					type="submit">Delete</button
 				>
