@@ -6,24 +6,30 @@
 	import ItemCard from '$lib/components/ItemCard.svelte';
 	import DeleteItemDialog from '$lib/components/DeleteItemDialog.svelte';
 	import { useItems } from '$lib/queries/useItems';
+	import { useInfiniteData } from '@e-ration/hooks';
+	import type { ApiGetAllResult } from '$lib/utils/types';
 
 	let deleteItemDialog: DeleteItemDialog;
 
 	const addItem = useAddItem();
-	const itemsQuery = useItems({ limit: 10 });
+	const query = useInfiniteData<ApiGetAllResult<ItemJson>>({
+		key: 'items',
+		url: '/api/items',
+		limit: 10
+	});
 
 	function onDeleteItem(e: CustomEvent<ItemJson>) {
 		deleteItemDialog.start(e.detail);
 	}
 </script>
 
-{#if $itemsQuery.isLoading}
+{#if $query.isLoading}
 	<div class="h-[80vh] flex items-center justify-center">
 		<Spinner color="black" width="3px" size="40px" />
 	</div>
-{:else if $itemsQuery.isError}
-	<span>An error has occurred: {$itemsQuery.error.message}</span>
-{:else if $itemsQuery.isSuccess}
+{:else if $query.isError}
+	<span>An error has occurred: {$query.error.message}</span>
+{:else if $query.isSuccess}
 	<DeleteItemDialog bind:this={deleteItemDialog} />
 	<div class="flex items-center justify-between py-5 px-3 sticky top-16 bg-white border-b gap-5">
 		<div class="flex-1">
@@ -36,8 +42,8 @@
 		<div class="text-lg font-medium col-span-2">Unit</div>
 	</div>
 	<div class="flex flex-col gap-5 p-3">
-		{#each $itemsQuery.data.pages as page}
-			{#each page.items as item}
+		{#each $query.data.pages as page}
+			{#each page.data as item}
 				<ItemCard data={item} on:delete={onDeleteItem} />
 			{/each}
 		{/each}

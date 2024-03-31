@@ -5,44 +5,42 @@ export interface ICategory {
   name: string;
 }
 
-export interface ICategoryItem {
-  id: string;
-  name: string;
-  unit: string;
-  quantity: number;
-}
-
-export class CategoryItem implements ICategoryItem {
+export class CategoryItem {
   id!: string;
   name!: string;
   unit!: string;
   quantity!: number;
 }
 
-type CategoryNewData = Omit<ICategory, 'id'> & {
-  items: Array<ICategoryItem>;
-};
+export interface CategoryJson {
+  id: string;
+  name: string;
+  created: string;
+  items?: Array<CategoryItem>;
+}
 
 @Collection()
 export class Category implements ICategory {
   id!: string;
   name!: string;
+  created!: Date;
 
   @SubCollection(CategoryItem)
   items!: ISubCollection<CategoryItem>;
 
-  async toJson() {
+  toJson(): CategoryJson {
     return {
       id: this.id,
       name: this.name,
-      items: await this.items.find()
+      created: this.created.toISOString()
     };
   }
 
-  static fromJson(data: ICategory): Category {
+  static fromJson(data: CategoryJson): Category {
     const category = new Category();
     category.id = data.id;
     category.name = data.name;
+    category.created = new Date(data.created);
     return category;
   }
 }

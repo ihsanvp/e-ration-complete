@@ -386,6 +386,9 @@ importers:
 
   packages/hooks:
     dependencies:
+      '@sveltestack/svelte-query':
+        specifier: ^1.6.0
+        version: 1.6.0
       svelte:
         specifier: ^4.2.12
         version: 4.2.12

@@ -6,6 +6,7 @@
         ".": "./index.ts"
     },
     "dependencies": {
+        "@sveltestack/svelte-query": "^1.6.0",
         "svelte": "^4.2.12"
     }
 }
