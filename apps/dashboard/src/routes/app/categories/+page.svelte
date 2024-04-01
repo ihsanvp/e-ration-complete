@@ -36,12 +36,6 @@
 			<CategoryForm on:cancel={close} on:submit={(e) => $addCategory.mutate(e.detail)} />
 		</ActionDialog>
 	</svelte:fragment>
-	<svelte:fragment slot="header">
-		<div class="grid grid-cols-6 border-b sticky px-5 py-5 bg-white top-36 items-center">
-			<div class="text-lg font-medium col-span-3">Name</div>
-			<div class="text-lg font-medium col-span-2">Unit</div>
-		</div>
-	</svelte:fragment>
 	<svelte:fragment slot="data" let:data>
 		<CategoryCard {data} />
 	</svelte:fragment>

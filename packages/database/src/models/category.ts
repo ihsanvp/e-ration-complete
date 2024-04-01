@@ -4,7 +4,7 @@ export interface CategoryJson {
   id: string;
   name: string;
   created: string;
-  items?: Array<CategoryItem>;
+  items?: Array<CategoryItemJson>;
 }
 
 export interface CategoryItemJson {
@@ -19,6 +19,15 @@ export class CategoryItem {
   name!: string;
   unit!: string;
   quantity!: number;
+
+  toJson(): CategoryItemJson {
+    return {
+      id: this.id,
+      name: this.name,
+      unit: this.unit,
+      quantity: this.quantity
+    };
+  }
 }
 
 @Collection()

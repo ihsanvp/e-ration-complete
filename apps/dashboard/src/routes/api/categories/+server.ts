@@ -21,9 +21,13 @@ export async function GET({ url }) {
 	} else {
 		data = await repo.orderByAscending('created').find();
 	}
+	const categoryItems = await Promise.all(data.map((category) => category.items.find()));
 	return json({
 		cursor: cursor,
-		data: data.map((c) => c.toJson())
+		data: data.map((category, i) => ({
+			...category.toJson(),
+			items: categoryItems[i].map((item) => item.toJson())
+		}))
 	});
 }
 
