@@ -1,15 +1,12 @@
-<script lang="ts">
+<script lang="ts" generics="R, E extends Error, D">
 	import { createDialog, melt } from '@melt-ui/svelte';
 	import Icon from '@iconify/svelte';
 	import Spinner from './Spinner.svelte';
 	import type { MutationStoreResult } from '@sveltestack/svelte-query';
 	import { createEventDispatcher } from 'svelte';
 
-	export let titleName: string;
-	export let isLoading: boolean;
-	export let isError: boolean;
-	export let isSuccess: boolean;
-	export let error: Error | null;
+	export let name: string;
+	export let action: MutationStoreResult<R, E, D>;
 
 	const dispatch = createEventDispatcher();
 
@@ -40,15 +37,15 @@
 			class="fixed flex flex-col bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] w-[90vw] z-50 border border-white rounded-md"
 			use:melt={$content}
 		>
-			{#if isLoading}
+			{#if $action.isLoading}
 				<div class="absolute inset-0 z-50 bg-white flex items-center justify-center">
 					<Spinner color="black" width="3px" size="40px" />
 				</div>
-			{:else if isError}
+			{:else if $action.isError}
 				<div class="absolute inset-0 z-50 bg-white flex flex-col items-center justify-center">
 					<div class="flex-1 flex flex-col items-center justify-center p-5">
 						<div class="text-2xl font-medium">Error</div>
-						<div class="text-center mt-5">{error?.message}</div>
+						<div class="text-center mt-5">{$action.error?.message}</div>
 					</div>
 					<div class="p-5">
 						<button on:click={closeModal} class="bg-black text-white px-10 py-3 text-sm rounded-md"
@@ -56,11 +53,11 @@
 						>
 					</div>
 				</div>
-			{:else if isSuccess}
+			{:else if $action.isSuccess}
 				<div class="absolute inset-0 z-50 bg-white flex flex-col items-center justify-center">
 					<div class="flex-1 flex flex-col items-center justify-center p-5">
 						<div class="text-2xl font-medium">Success</div>
-						<div>New {titleName} added</div>
+						<div>New {name} added</div>
 					</div>
 					<div class="p-5">
 						<button on:click={closeModal} class="bg-black text-white px-10 py-3 text-sm rounded-md"
@@ -69,7 +66,7 @@
 					</div>
 				</div>
 			{/if}
-			<h2 use:melt={$title} class="text-xl font-medium p-5 text-center">Create new {titleName}</h2>
+			<h2 use:melt={$title} class="text-xl font-medium p-5 text-center">Create new {name}</h2>
 			<div class="overflow-y-scroll">
 				<slot close={closeModal} />
 			</div>
