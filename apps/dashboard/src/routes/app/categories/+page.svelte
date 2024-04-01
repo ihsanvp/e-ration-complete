@@ -3,16 +3,30 @@
 	import AddButton from '$lib/components/AddButton.svelte';
 	import CategoryCard from '$lib/components/CategoryCard.svelte';
 	import CategoryForm from '$lib/components/CategoryForm.svelte';
+	import DeleteDialog from '$lib/components/DeleteDialog.svelte';
 	import InfiniteScrollView from '$lib/components/InfiniteScrollView.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import type { ApiGetResult } from '$lib/utils/types';
-	import type { CategoryItemJson, CategoryJson } from '@e-ration/database';
-	import { useAddData, useInfiniteData } from '@e-ration/hooks';
+	import type { CategoryItemJson, CategoryJson, ItemJson } from '@e-ration/database';
+	import { useAddData, useCompleteData, useDeleteData, useInfiniteData } from '@e-ration/hooks';
 
 	interface InputData {
 		name: string;
 		items: CategoryItemJson[];
 	}
+
+	let currentDeletingCategory: CategoryJson;
+	let deleteDialog: DeleteDialog<CategoryJson, ApiGetResult<ItemJson>, Error>;
+
+	const getItems = useCompleteData<ApiGetResult<ItemJson>>({
+		key: 'items-all',
+		endpoint: '/api/items'
+	});
+
+	const deleteCategory = useDeleteData({
+		endpoint: '/api/items',
+		invalidateKeys: ['categories', 'items', 'items-all']
+	});
 
 	const getCategories = useInfiniteData<ApiGetResult<CategoryJson>>({
 		key: 'categories',

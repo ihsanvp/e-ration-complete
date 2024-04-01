@@ -25,7 +25,7 @@ export function useAddData<InputDataType, ResultType>(config: Config) {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(config.invalidateKeys);
+        config.invalidateKeys.forEach((key) => queryClient.invalidateQueries(key));
       }
     }
   );
