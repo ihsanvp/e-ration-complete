@@ -5,6 +5,7 @@ export interface IUser {
   name: string;
   location: string;
   phoneNumber: string;
+  category: string;
 }
 
 @Collection()
@@ -13,13 +14,15 @@ export class User implements IUser {
   name!: string;
   location!: string;
   phoneNumber!: string;
+  category!: string;
 
   toJson(): IUser {
     return {
       id: this.id,
       name: this.name,
       location: this.location,
-      phoneNumber: this.phoneNumber
+      phoneNumber: this.phoneNumber,
+      category: this.category
     };
   }
 
@@ -29,6 +32,7 @@ export class User implements IUser {
     user.name = data.name;
     user.location = data.location;
     user.phoneNumber = data.phoneNumber;
+    user.category = data.category;
     return user;
   }
 }

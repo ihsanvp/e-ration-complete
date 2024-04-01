@@ -19,7 +19,7 @@ export async function handle({ event, resolve }) {
 			event.locals.user = user.toJson();
 		}
 		if (!user) {
-			if (event.url.pathname != '/register') {
+			if (event.url.pathname != '/register' && event.url.pathname != '/api/auth/register') {
 				throw redirect(307, '/register');
 			}
 		}
