@@ -1,4 +1,10 @@
-import { BaseFirestoreRepository, CustomRepository, IWherePropParam, getRepository } from 'fireorm';
+import {
+  BaseFirestoreRepository,
+  CustomRepository,
+  IWherePropParam,
+  getRepository,
+  runTransaction
+} from 'fireorm';
 import { Item, ItemCreate } from '../models/item';
 import {
   DocumentData,
@@ -8,6 +14,7 @@ import {
   getCountFromServer,
   getDoc
 } from 'firebase/firestore';
+import { Category } from '../models/category';
 
 interface PaginationConfig {
   orderBy: IWherePropParam<Item>;
@@ -39,6 +46,19 @@ class CustomItemRepository extends BaseFirestoreRepository<Item> {
         .find();
     }
     return this.orderByAscending(config.orderBy).limit(config.limit).find();
+  }
+
+  async deleteWithLinkedCategoryItems(id: string) {
+    return await runTransaction(async (tran) => {
+      const itemRepo = tran.getRepository(Item);
+      const categoryRepo = tran.getRepository(Category);
+
+      const categories = await categoryRepo.find();
+      for (const category of categories) {
+        category.items.delete(id);
+      }
+      itemRepo.delete(id);
+    });
   }
 }
 

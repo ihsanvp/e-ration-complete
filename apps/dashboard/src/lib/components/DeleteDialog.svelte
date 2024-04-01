@@ -21,8 +21,6 @@
 	export function open() {
 		$show = true;
 	}
-
-	$: console.log($query);
 </script>
 
 <slot name="trigger" {open} />
