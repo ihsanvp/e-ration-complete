@@ -10,15 +10,16 @@
 	export let data: PageData;
 
 	interface Data {
+		id: string | undefined;
 		name: string;
 		location: string;
 		category: string;
 	}
 
 	let toast: Toast;
-	let name: string;
-	let location: string;
-	let category: string;
+	let name: string = data.user ? data.user.name : '';
+	let location: string = data.user ? data.user.location : '';
+	let category: string = data.user ? data.user.category : '';
 
 	const request = useFetch<Data, void, Error>({
 		updateSuccess: false,
@@ -42,7 +43,10 @@
 <section class="flex flex-col">
 	<Header />
 	<div class="text-2xl text-center p-3">Complete your profile</div>
-	<form on:submit|preventDefault={() => request.start({ name, location, category })}>
+	<form
+		on:submit|preventDefault={() =>
+			request.start({ name, location, category, id: data.user ? data.user.id : undefined })}
+	>
 		<div class="flex flex-col items-center justify-start px-5 mt-6 gap-5">
 			<div class="w-full flex flex-col items-start justify-center">
 				<label for="profile__name" class="mb-2">Name</label>

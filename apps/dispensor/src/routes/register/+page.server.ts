@@ -8,10 +8,11 @@ import { error, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 
 /** @type {import("./$types").PageLoad} */
-export async function load() {
+export async function load({ locals }) {
 	initializeDatabase();
 	const categories = await getCategoryRepository().orderByAscending('created').find();
 	return {
-		categories: categories.map((c) => c.toJson())
+		categories: categories.map((c) => c.toJson()),
+		user: locals.user
 	};
 }
