@@ -41,7 +41,7 @@
 			<input bind:value={unit} required class="w-full rounded-md" type="text" id="add-item__unit" />
 		</label>
 	</div>
-	<div class="grid grid-cols-1 items-center gap-5 mt-5 border-gray-300 border-t p-5">
+	<div class="grid grid-cols-1 items-center gap-5 border-gray-300 border-t p-5">
 		<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Create</button>
 	</div>
 </form>

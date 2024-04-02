@@ -34,7 +34,8 @@
 		}
 	];
 
-	$: showBackButton = ($page.data.hasBack as boolean) ?? false;
+	$: title = $page.data.title ?? '';
+	$: showBackButton = ($page.data.showBackButton as boolean) ?? false;
 </script>
 
 <QueryClientProvider client={queryClient}>
@@ -58,8 +59,8 @@
 				</button>
 			</Drawer>
 		{/if}
-		<div class="flex-1">
-			<div class="text-xl font-medium capitalize">{$page.data.title}</div>
+		<div class="flex-1 truncate text-xl font-medium capitalize">
+			{title}
 		</div>
 		<div>
 			<a href="/app/settings" class="p-1 flex items-center justify-center w-9 h-9">

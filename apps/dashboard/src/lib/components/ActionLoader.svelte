@@ -16,15 +16,15 @@
 		<slot name="error" error={$action.error}>
 			<div class="flex flex-col items-center justify-center p-5">
 				<Icon class="text-red-500" width={120} icon="mingcute:close-circle-fill" />
-				<div class="text-4xl font-medium">Error</div>
+				<div class="text-4xl font-medium mt-5">Error</div>
 				<div class="text-md text-gray-600 text-center">{$action.error?.message}</div>
-				<div class="grid grid-cols-2 items-center gap-5">
+				<div class="w-full grid grid-cols-2 items-center gap-5 mt-5">
 					<button
-						class="px-10 py-3 text-sm bg-gray-300 text-black rounded-md mt-5"
+						class="w-full py-3 text-xs font-medium border border-gray-300 text-black rounded-md mt-5"
 						on:click={() => window.history.back()}>Go back</button
 					>
 					<button
-						class="px-10 py-3 text-sm bg-black text-white rounded-md mt-5"
+						class="w-full py-3 text-xs font-medium bg-black text-white rounded-md mt-5"
 						on:click={() => $action.reset()}>Try again</button
 					>
 				</div>
