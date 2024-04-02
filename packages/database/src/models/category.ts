@@ -28,6 +28,15 @@ export class CategoryItem {
       quantity: this.quantity
     };
   }
+
+  static fromJson(data: CategoryItemJson): CategoryItem {
+    const item = new CategoryItem();
+    item.id = data.id;
+    item.name = data.name;
+    item.unit = data.unit;
+    item.quantity = data.quantity;
+    return item;
+  }
 }
 
 @Collection()

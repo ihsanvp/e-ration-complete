@@ -1,6 +1,14 @@
-import { BaseFirestoreRepository, CustomRepository, IWherePropParam, getRepository } from 'fireorm';
-import { Category, CategoryItem, CategoryItemJson } from '../models/category';
+import {
+  BaseFirestoreRepository,
+  CustomRepository,
+  IWherePropParam,
+  getRepository,
+  runTransaction
+} from 'fireorm';
+import { Category, CategoryItem, CategoryItemJson, CategoryJson } from '../models/category';
 import { Item } from '../models/item';
+import { getUserRepository } from './user.repository';
+import { User } from '../models/user';
 
 interface PaginationConfig {
   orderBy: IWherePropParam<Category>;
@@ -15,23 +23,14 @@ interface CreateWithData {
 
 @CustomRepository(Category)
 export class CategoryRepository extends BaseFirestoreRepository<Category> {
-  async createWithItems(category: Category, items: CategoryItem[]) {
-    await this.create(category);
-    const batch = category.items.createBatch();
-
-    items.forEach((item) => batch.create(item));
-    await batch.commit();
-    return category;
-  }
-
-  async createWithData(data: CreateWithData): Promise<Category> {
+  async createFromData(data: CreateWithData): Promise<Category> {
     let category = new Category();
     category.id = `category__${data.name}`;
     category.name = data.name;
     category.created = new Date();
     category = await getCategoryRepository().create(category);
     const batch = category.items.createBatch();
-    data.items.forEach((item) => batch.create(item));
+    data.items.forEach((item) => batch.create(CategoryItem.fromJson(item)));
     await batch.commit();
     return category;
   }
@@ -45,6 +44,35 @@ export class CategoryRepository extends BaseFirestoreRepository<Category> {
         .find();
     }
     return this.orderByAscending(config.orderBy).limit(config.limit).find();
+  }
+
+  async serialize<T extends Category | Category[]>(
+    input: T
+  ): Promise<CategoryJson[] | CategoryJson> {
+    if (Array.isArray(input)) {
+      return runTransaction(async (tran) => {
+        const serialized = input.map((cat) => cat.toJson());
+        for (let i = 0; i < serialized.length; i++) {
+          const category = input[i];
+          const items = await category.items.find();
+          if (items) {
+            serialized[i].items = items.map((item) => item.toJson());
+          }
+        }
+        return serialized;
+      });
+    }
+    const category = input.toJson();
+    const items = await input.items.find();
+    if (items) {
+      category.items = items.map((item) => item.toJson());
+    }
+    return category;
+  }
+
+  async getLinkedUsers(category: Category): Promise<User[]> {
+    const users = await getUserRepository().find();
+    return users.filter((user) => user.category == category.id);
   }
 }
 

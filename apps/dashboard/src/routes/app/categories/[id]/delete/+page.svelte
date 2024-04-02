@@ -2,10 +2,18 @@
 	import DataView from '$lib/components/DataView.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
+	import { useDeleteData } from '@e-ration/hooks';
+	import ActionLoader from '$lib/components/ActionLoader.svelte';
 
 	export let data: PageData;
+
+	const deleteCategory = useDeleteData({
+		endpoint: '/api/categories',
+		invalidateKeys: ['categories']
+	});
 </script>
 
+<ActionLoader action={deleteCategory} successMessage="Successfully deleted category" />
 <div class="flex flex-col h-[calc(100vh_-_theme(space.16))]">
 	<div class="flex-1 overflow-y-scroll">
 		<h2 class="text-center font-medium text-3xl px-5 py-10">Are you sure to delete this item?</h2>
@@ -34,6 +42,9 @@
 			class="bg-black text-white py-3 text-sm font-medium rounded-md"
 			on:click={() => window.history.back()}>Cancel</button
 		>
-		<button class="bg-red-500 text-white py-3 text-sm font-medium rounded-md">Delete</button>
+		<button
+			class="bg-red-500 text-white py-3 text-sm font-medium rounded-md"
+			on:click={() => $deleteCategory.mutate(data.category.id)}>Delete</button
+		>
 	</div>
 </div>

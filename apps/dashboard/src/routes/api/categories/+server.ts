@@ -20,13 +20,10 @@ export async function GET({ url }) {
 	} else {
 		data = await repo.orderByAscending('created').find();
 	}
-	const categoryItems = await Promise.all(data.map((category) => category.items.find()));
+	const serialized = await repo.serialize(data);
 	return json({
 		cursor: cursor,
-		data: data.map((category, i) => ({
-			...category.toJson(),
-			items: categoryItems[i].map((item) => item.toJson())
-		}))
+		data: serialized
 	});
 }
 
@@ -48,7 +45,7 @@ export async function POST({ request }) {
 	const data = schema.parse(body);
 
 	try {
-		const category = await getCategoryRepository().createWithData(data);
+		const category = await getCategoryRepository().createFromData(data);
 		return json(category);
 	} catch (err) {
 		return error(400, String(err));
