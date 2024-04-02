@@ -1,14 +1,17 @@
 import { AuthConfig } from '$lib/auth/config.auth';
 import { getSession } from '$lib/auth/session.auth';
-import { isProtectedRoute } from '$lib/auth/utils.auth';
+import { isApiRequest, isProtectedRequest } from '$lib/auth/utils.auth';
 import { getFirebaseAdminAuth } from '$lib/firebase/firebase.admin';
 import { initializeDatabase } from '$lib/utils/db';
 import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import("@sveltejs/kit").Handle} */
 export async function handle({ event, resolve }) {
-	if (isProtectedRoute(event, AuthConfig.excludeRoutes)) {
+	if (isApiRequest(event)) {
 		initializeDatabase();
+	}
+
+	if (isProtectedRequest(event, AuthConfig.excludeRoutes)) {
 		const session = getSession(event, AuthConfig);
 		if (!session) {
 			throw redirect(307, '/login');

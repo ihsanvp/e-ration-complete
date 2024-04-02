@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 /** @type {import("./$types").RequestHandler} */
 export async function GET({ url }) {
-	initializeDatabase();
 	let items: Item[];
 	let cursor: string | undefined;
 	const limit = getPaginationLimit(url.searchParams);
@@ -38,7 +37,6 @@ export async function POST({ request }) {
 	const data = schema.parse(body);
 
 	try {
-		initializeDatabase();
 		const item = await getItemRepository().createWithData(data);
 		return json(item);
 	} catch (err) {

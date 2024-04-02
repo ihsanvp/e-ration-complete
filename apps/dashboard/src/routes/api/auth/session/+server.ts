@@ -25,6 +25,5 @@ export async function DELETE(event) {
 	}
 	event.cookies.delete(AuthConfig.cookie.name, AuthConfig.cookie.options);
 	event.locals.user = undefined;
-	event.locals.session = undefined;
 	return text('Success');
 }
