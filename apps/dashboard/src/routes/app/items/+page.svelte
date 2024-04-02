@@ -39,7 +39,7 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<AddButton onClick={() => goto('/app/items/add')} />
+		<AddButton onClick={() => goto('/app/items/create')} />
 		<!-- <ActionDialog name="Item" action={addItem} let:close on:close={$addItem.reset}>
 			<AddButton slot="trigger" let:open onClick={open} />
 			<ItemForm on:cancel={close} on:submit={(e) => $addItem.mutate(e.detail)} />

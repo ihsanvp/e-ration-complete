@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<Events>();
+
+	interface Events {
+		submit: Data;
+	}
 
 	interface Data {
 		name: string;
@@ -21,25 +25,23 @@
 			dispatch('submit', { name, unit });
 		}
 	}
-
-	function onCancel() {
-		dispatch('cancel');
-	}
 </script>
 
-<form class="p-5 flex flex-col gap-5" on:submit|preventDefault={onSubmit}>
-	<label for="add-item__name">
-		<p class="mb-2">Name</p>
-		<input bind:value={name} required class="w-full rounded-md" type="text" id="add-item__name" />
-	</label>
-	<label for="add-item__unit">
-		<p class="mb-2">Unit</p>
-		<input bind:value={unit} required class="w-full rounded-md" type="text" id="add-item__unit" />
-	</label>
-	<div class="grid grid-cols-2 items-center gap-5 mt-5">
-		<button class="bg-gray-200 py-3 text-sm rounded-md" type="button" on:click={onCancel}
-			>Cancel</button
-		>
+<form
+	class="flex flex-col justify-between h-[calc(100vh_-_theme(space.16))]"
+	on:submit|preventDefault={onSubmit}
+>
+	<div class="flex-1 flex flex-col gap-5 overflow-y-scroll p-5">
+		<label for="add-item__name">
+			<p class="mb-2">Name</p>
+			<input bind:value={name} required class="w-full rounded-md" type="text" id="add-item__name" />
+		</label>
+		<label for="add-item__unit">
+			<p class="mb-2">Unit</p>
+			<input bind:value={unit} required class="w-full rounded-md" type="text" id="add-item__unit" />
+		</label>
+	</div>
+	<div class="grid grid-cols-1 items-center gap-5 mt-5 border-gray-300 border-t p-5">
 		<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Create</button>
 	</div>
 </form>

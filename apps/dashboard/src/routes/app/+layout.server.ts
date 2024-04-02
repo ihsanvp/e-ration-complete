@@ -1,12 +1,12 @@
 import { error } from '@sveltejs/kit';
 
-const BACK_PAGES = ['/app/items/add', '/app/settings'];
+const BACK_PAGES = ['/app/items/create', '/app/settings'];
 const TITLES_MAP = new Map(
 	Object.entries({
 		'/app/overview': 'Overview',
 
 		'/app/items': 'Items',
-		'/app/items/add': 'Add Item',
+		'/app/items/create': 'Create Item',
 
 		'/app/bookings': 'Bookings',
 
