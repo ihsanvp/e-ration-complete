@@ -9,6 +9,7 @@
 	import ItemForm from '$lib/components/ItemForm.svelte';
 	import ActionDialog from '$lib/components/ActionDialog.svelte';
 	import InfiniteScrollView from '$lib/components/InfiniteScrollView.svelte';
+	import { goto } from '$app/navigation';
 
 	interface AddItemData {
 		name: string;
@@ -38,10 +39,11 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<ActionDialog name="Item" action={addItem} let:close on:close={$addItem.reset}>
+		<AddButton onClick={() => goto('/app/items/add')} />
+		<!-- <ActionDialog name="Item" action={addItem} let:close on:close={$addItem.reset}>
 			<AddButton slot="trigger" let:open onClick={open} />
 			<ItemForm on:cancel={close} on:submit={(e) => $addItem.mutate(e.detail)} />
-		</ActionDialog>
+		</ActionDialog> -->
 	</svelte:fragment>
 	<svelte:fragment slot="header">
 		<div class="grid grid-cols-6 border-b sticky px-5 py-5 bg-white top-36 items-center">

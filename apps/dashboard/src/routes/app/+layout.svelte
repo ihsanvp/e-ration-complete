@@ -5,8 +5,6 @@
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
 	import { page } from '$app/stores';
 
-	let title: string = '';
-
 	const queryClient = new QueryClient();
 	const items = [
 		{
@@ -36,17 +34,14 @@
 		}
 	];
 
-	$: title =
-		items.find((item) => $page.url.pathname == item.href)?.label ??
-		$page.url.pathname.replace('/app/', '') ??
-		'';
+	$: showBackButton = ($page.data.hasBack as boolean) ?? false;
 </script>
 
 <QueryClientProvider client={queryClient}>
 	<header
 		class="fixed top-0 left-0 right-0 h-16 border-b bg-white flex items-center justify-between px-3 gap-5"
 	>
-		{#if $page.url.pathname == '/app/settings'}
+		{#if showBackButton}
 			<button
 				class="p-1 flex items-center justify-center w-9 h-9 border rounded-md border-gray-300"
 				on:click={() => window.history.back()}
@@ -64,7 +59,7 @@
 			</Drawer>
 		{/if}
 		<div class="flex-1">
-			<div class="text-xl font-medium capitalize">{title}</div>
+			<div class="text-xl font-medium capitalize">{$page.data.title}</div>
 		</div>
 		<div>
 			<a href="/app/settings" class="p-1 flex items-center justify-center w-9 h-9">
