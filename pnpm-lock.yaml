@@ -60,6 +60,9 @@ importers:
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.42.1
+      '@prgm/sveltekit-progress-bar':
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@2.5.2)(svelte@4.2.12)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/config-eslint
@@ -1379,6 +1382,17 @@ packages:
 
   /@polka/url@1.0.0-next.24:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
+    dev: true
+
+  /@prgm/sveltekit-progress-bar@2.0.0(@sveltejs/kit@2.5.2)(svelte@4.2.12):
+    resolution: {integrity: sha512-N9SlYDfpqaY9MyG85Wk38R9/BipIUdTJ4U7LVPY5cFn5cwGZrVA1lsXC3I2kmGtwz+DF6v/DvySkYOWCPmJV4A==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^4.0.0
+    dependencies:
+      '@sveltejs/kit': 2.5.2(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.1.4)
+      svelte: 4.2.12
     dev: true
 
   /@protobufjs/aspromise@1.1.2:
