@@ -41,7 +41,12 @@
 			<input bind:value={unit} required class="w-full rounded-md" type="text" id="add-item__unit" />
 		</label>
 	</div>
-	<div class="grid grid-cols-1 items-center gap-5 border-gray-300 border-t p-5">
+	<div class="grid grid-cols-2 items-center gap-5 border-gray-300 border-t p-5">
+		<button
+			class="border border-gray-300 text-black py-3 text-sm rounded-md"
+			type="button"
+			on:click={() => window.history.back()}>Cancel</button
+		>
 		<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Create</button>
 	</div>
 </form>

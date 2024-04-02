@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import ActionDialog from '$lib/components/ActionDialog.svelte';
 	import AddButton from '$lib/components/AddButton.svelte';
 	import CategoryCard from '$lib/components/CategoryCard.svelte';
@@ -14,9 +15,6 @@
 		name: string;
 		items: CategoryItemJson[];
 	}
-
-	let currentDeletingCategory: CategoryJson;
-	let deleteDialog: DeleteDialog<CategoryJson, ApiGetResult<ItemJson>, Error>;
 
 	const getItems = useCompleteData<ApiGetResult<ItemJson>>({
 		key: 'items-all',
@@ -45,10 +43,7 @@
 		<div class="flex-1">
 			<input class="w-full border border-gray-300 rounded-md" type="search" placeholder="Search" />
 		</div>
-		<ActionDialog name="Item" action={addCategory} let:close on:close={$addCategory.reset}>
-			<AddButton slot="trigger" let:open onClick={open} />
-			<CategoryForm on:cancel={close} on:submit={(e) => $addCategory.mutate(e.detail)} />
-		</ActionDialog>
+		<AddButton onClick={() => goto('/app/categories/create')} />
 	</svelte:fragment>
 	<svelte:fragment slot="data" let:data>
 		<CategoryCard {data} />
