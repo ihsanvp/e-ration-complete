@@ -29,9 +29,11 @@ export class CategoryRepository extends BaseFirestoreRepository<Category> {
     category.name = data.name;
     category.created = new Date();
     category = await getCategoryRepository().create(category);
-    const batch = category.items.createBatch();
-    data.items.forEach((item) => batch.create(CategoryItem.fromJson(item)));
-    await batch.commit();
+    if (Array.isArray(data.items) && data.items.length) {
+      const batch = category.items.createBatch();
+      data.items.forEach((item) => batch.create(CategoryItem.fromJson(item)));
+      await batch.commit();
+    }
     return category;
   }
 
@@ -71,8 +73,22 @@ export class CategoryRepository extends BaseFirestoreRepository<Category> {
   }
 
   async getLinkedUsers(category: Category): Promise<User[]> {
-    const users = await getUserRepository().find();
-    return users.filter((user) => user.category == category.id);
+    return await getUserRepository()
+      .whereEqualTo((user) => user.category, category.id)
+      .find();
+  }
+
+  async forceDeleteWithLinkedUsers(category: Category) {
+    const users = await this.getLinkedUsers(category);
+    if (users.length) {
+      const batch = getUserRepository().createBatch();
+      for (const user of users) {
+        user.category = null;
+        batch.update(user);
+      }
+      await batch.commit();
+    }
+    await this.delete(category.id);
   }
 }
 

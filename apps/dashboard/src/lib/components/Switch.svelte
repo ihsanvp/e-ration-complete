@@ -14,6 +14,7 @@
 		$checked = value;
 	});
 
+	$: value = $checked;
 	$: dispatch('change', $checked);
 </script>
 

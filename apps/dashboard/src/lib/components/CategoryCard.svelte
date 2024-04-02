@@ -8,7 +8,7 @@
 
 <div class="flex flex-col p-5 border rounded-md border-gray-500">
 	<div class="text-2xl font-medium">{data.name}</div>
-	{#if data.items}
+	{#if Array.isArray(data.items) && data.items.length}
 		<div class="bg-gray-100 rounded-md p-3 mt-5">
 			<div class="flex items-center justify-between mb-3">
 				<div class="font-bold">Item</div>

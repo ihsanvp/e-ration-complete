@@ -19,10 +19,6 @@ export async function DELETE({ params }) {
 	if (!category) {
 		return error(404);
 	}
-	const linkedUsers = await repo.getLinkedUsers(category);
-	if (linkedUsers.length) {
-		return error(403, 'conflict with users');
-	}
-	await repo.delete(category.id);
+	await repo.forceDeleteWithLinkedUsers(category);
 	return text('Success');
 }
