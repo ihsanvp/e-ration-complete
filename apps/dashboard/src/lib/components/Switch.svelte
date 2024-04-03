@@ -8,10 +8,8 @@
 	const {
 		elements: { root, input },
 		states: { checked }
-	} = createSwitch();
-
-	onMount(() => {
-		$checked = value;
+	} = createSwitch({
+		defaultChecked: value
 	});
 
 	$: value = $checked;
