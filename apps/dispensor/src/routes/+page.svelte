@@ -32,6 +32,11 @@
 </section>
 {#if data.items.length}
 	<footer class="fixed bottom-0 left-0 right-0 border-t h-24 px-5 flex items-center justify-center">
-		<BookingDialog on:exit={() => logout()} items={selected} category={data.category} />
+		<BookingDialog
+			on:exit={() => logout()}
+			on:continue={() => window.location.reload()}
+			items={selected}
+			category={data.category}
+		/>
 	</footer>
 {/if}
