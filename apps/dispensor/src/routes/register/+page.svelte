@@ -13,7 +13,10 @@
 		id: string | undefined;
 		name: string;
 		location: string;
-		category: string;
+		category: {
+			id: string;
+			name: string;
+		};
 	}
 
 	let toast: Toast;
@@ -37,16 +40,22 @@
 			window.location.href = window.location.href.replace($page.url.pathname, '/');
 		}
 	});
+
+	function handleSubmit() {
+		request.start({
+			name,
+			location,
+			category: data.categories.find((c) => c.id == category)!,
+			id: data.user ? data.user.id : undefined
+		});
+	}
 </script>
 
 <Toast bind:this={toast} />
 <section class="flex flex-col">
 	<Header />
 	<div class="text-2xl text-center p-3">Complete your profile</div>
-	<form
-		on:submit|preventDefault={() =>
-			request.start({ name, location, category, id: data.user ? data.user.id : undefined })}
-	>
+	<form on:submit|preventDefault={handleSubmit}>
 		<div class="flex flex-col items-center justify-start px-5 mt-6 gap-5">
 			<div class="w-full flex flex-col items-start justify-center">
 				<label for="profile__name" class="mb-2">Name</label>

@@ -9,7 +9,10 @@ const schema = z.object({
 	id: z.string().optional(),
 	name: z.string(),
 	location: z.string(),
-	category: z.string()
+	category: z.object({
+		id: z.string(),
+		name: z.string()
+	})
 });
 
 /** @type {import("./$types").RequestHandler} */
@@ -38,7 +41,8 @@ export async function POST(event) {
 			name: data.name,
 			location: data.location,
 			phoneNumber: firebaseUser.phoneNumber!,
-			category: data.category
+			category: data.category,
+			created: new Date().toISOString()
 		});
 		await repo.create(user);
 	}

@@ -24,7 +24,7 @@
 		},
 		{
 			label: 'Categories',
-			icon: 'mage:users-fill',
+			icon: 'ri:bank-card-fill',
 			href: '/app/categories'
 		},
 		{

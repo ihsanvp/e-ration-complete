@@ -16,7 +16,7 @@ export async function load({ locals }) {
 	if (!user.category) {
 		return error(403);
 	}
-	const category = await getCategoryRepository().findById(user.category);
+	const category = await getCategoryRepository().findById(user.category.id);
 	if (!category) {
 		return error(500, 'Invalid Category');
 	}
