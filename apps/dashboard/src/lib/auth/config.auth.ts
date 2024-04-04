@@ -13,7 +13,7 @@ export interface AuthConfigType {
 }
 
 export const AuthConfig: AuthConfigType = {
-	excludeRoutes: ['/login', '/api/auth/session'],
+	excludeRoutes: ['/login', '/api/auth/session', '/api/auth/admin'],
 	cookie: {
 		name: '__e_ra_dash_sess',
 		options: {
