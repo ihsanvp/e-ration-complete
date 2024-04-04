@@ -14,6 +14,7 @@
 		type LoginWithOTPData,
 		type SendOTPData
 	} from '$lib/auth/actions.auth';
+	import Toast from '$lib/components/Toast.svelte';
 
 	enum LoginView {
 		SEND = 'view:send',
@@ -23,6 +24,7 @@
 	let view: LoginView = LoginView.SEND;
 	let confirmation: ConfirmationResult;
 	let captcha: RecaptchaVerifier;
+	let toast: Toast;
 
 	const sendOTPRequest = useFetch<SendOTPData, void, Error>({
 		updateSuccess: false,
@@ -30,8 +32,9 @@
 			confirmation = await sendOTP(data);
 			changeView(LoginView.VERIFY);
 		},
-		onError: () => {
+		onError: (err) => {
 			captcha = resetCaptcha(captcha, CAPTCHA_ELEMENT_ID);
+			toast.error(err.message);
 		}
 	});
 
@@ -51,6 +54,7 @@
 	});
 </script>
 
+<Toast bind:this={toast} />
 <section class="h-screen flex flex-col">
 	<div id={CAPTCHA_ELEMENT_ID}></div>
 	<Header />
