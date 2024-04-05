@@ -10,7 +10,7 @@ export async function load({ fetch }) {
 	const configs = (await response.json()).data as IConfiguration[];
 	const monthlyBooking =
 		configs.find((config) => config.id == 'monthly_booking') ??
-		Configuration.fromJson({ id: 'monthly_booking', value: false });
+		Configuration.fromJson({ id: 'monthly_booking', value: false }).toJson();
 	return {
 		title: 'Settings',
 		showBackButton: true,
