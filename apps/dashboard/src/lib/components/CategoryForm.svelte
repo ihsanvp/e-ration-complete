@@ -5,7 +5,7 @@
 
 	interface Data {
 		name: string;
-		items?: CategoryItemJson[];
+		items: CategoryItemJson[];
 	}
 
 	export let label: string;
@@ -15,22 +15,25 @@
 	let itemsManager: CategoryItemManager;
 	let name: string = initial ? initial.name : '';
 
-	$: disabled = calculateDisabled(initial, itemsManager);
-
-	$: console.log(disabled);
+	$: disabled = calculateDisabled(initial, itemsManager, name);
 
 	function calculateDisabled(
 		i: Data | undefined,
-		manager: CategoryItemManager | undefined
+		manager: CategoryItemManager | undefined,
+		n: string
 	): boolean {
 		if (i) {
-			if (manager) {
-				console.log('ok', JSON.stringify(manager.getData()) == JSON.stringify(i.items));
-				return JSON.stringify(manager.getData()) == JSON.stringify(i.items);
-			}
-			return true;
+			let d: Data = {
+				name: n,
+				items: manager ? manager.getData() : []
+			};
+			let f: Data = {
+				name: i.name,
+				items: i.items
+			};
+			return JSON.stringify(d) == JSON.stringify(f);
 		}
-		return true;
+		return false;
 	}
 
 	const dispatch = createEventDispatcher();
@@ -74,7 +77,7 @@
 			<input required bind:value={name} class="w-full rounded-md" type="text" id="add-item__name" />
 		</label>
 		<CategoryItemManager
-			on:change={() => (disabled = calculateDisabled(initial, itemsManager))}
+			on:change={() => (disabled = calculateDisabled(initial, itemsManager, name))}
 			bind:this={itemsManager}
 			items={createManagerItems()}
 		/>
