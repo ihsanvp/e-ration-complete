@@ -22,7 +22,7 @@
 
 	function onSubmit() {
 		if (name && unit) {
-			dispatch('submit', { name, unit });
+			dispatch('submit', { name: name.toLowerCase(), unit: unit.toLowerCase() });
 		}
 	}
 </script>
