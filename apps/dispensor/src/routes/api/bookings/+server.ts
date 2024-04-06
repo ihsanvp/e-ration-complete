@@ -2,6 +2,8 @@
 
 import {
 	Booking,
+	Booking2,
+	getBooking2Repository,
 	getBookingRepository,
 	getCategoryRepository,
 	getUserRepository
@@ -29,5 +31,12 @@ export async function POST({ request }) {
 	if (!booking) {
 		return error(400, 'Invalid data');
 	}
+	const booking2 = Booking2.fromJson({
+		id: booking.id,
+		category: booking.category.name,
+		items: data.items,
+		created: booking.created.toISOString()
+	});
+	await getBooking2Repository().create(booking2);
 	return json(booking);
 }
