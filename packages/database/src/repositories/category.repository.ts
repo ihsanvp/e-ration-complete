@@ -74,7 +74,7 @@ export class CategoryRepository extends BaseFirestoreRepository<Category> {
 
   async getLinkedUsers(category: Category): Promise<User[]> {
     return await getUserRepository()
-      .whereEqualTo((user) => user.category, category.id)
+      .whereEqualTo((user) => user.category?.id, category.id)
       .find();
   }
 
