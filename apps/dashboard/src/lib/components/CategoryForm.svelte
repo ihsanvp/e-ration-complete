@@ -8,19 +8,35 @@
 		items?: CategoryItemJson[];
 	}
 
+	export let label: string;
 	export let items: ItemJson[];
-	export let initial: Data = {
-		name: '',
-		items: undefined
-	};
+	export let initial: Data | undefined = undefined;
 
 	let itemsManager: CategoryItemManager;
-	let name: string = initial.name;
+	let name: string = initial ? initial.name : '';
+
+	$: disabled = calculateDisabled(initial, itemsManager);
+
+	$: console.log(disabled);
+
+	function calculateDisabled(
+		i: Data | undefined,
+		manager: CategoryItemManager | undefined
+	): boolean {
+		if (i) {
+			if (manager) {
+				console.log('ok', JSON.stringify(manager.getData()) == JSON.stringify(i.items));
+				return JSON.stringify(manager.getData()) == JSON.stringify(i.items);
+			}
+			return true;
+		}
+		return true;
+	}
 
 	const dispatch = createEventDispatcher();
 
 	function createManagerItems() {
-		if (initial.items) {
+		if (initial) {
 			return items.map((item) => {
 				const matched = initial.items?.find((i) => i.id == item.id);
 				if (matched) {
@@ -51,23 +67,37 @@
 	}
 </script>
 
-<form
-	class="flex flex-col justify-between h-[calc(100vh_-_theme(space.16))]"
-	on:submit|preventDefault={onSubmit}
->
+<form class="flex flex-col justify-between pb-24" on:submit|preventDefault={onSubmit}>
 	<div class="flex-1 flex flex-col overflow-y-scroll p-5 gap-5">
 		<label for="add-item__name">
 			<p class="mb-2">Name</p>
 			<input required bind:value={name} class="w-full rounded-md" type="text" id="add-item__name" />
 		</label>
-		<CategoryItemManager bind:this={itemsManager} items={createManagerItems()} />
+		<CategoryItemManager
+			on:change={() => (disabled = calculateDisabled(initial, itemsManager))}
+			bind:this={itemsManager}
+			items={createManagerItems()}
+		/>
 	</div>
-	<div class="grid grid-cols-2 items-center gap-5 border-gray-300 border-t p-5">
+	<div
+		class="fixed bottom-0 left-0 right-0 bg-white z-20 grid grid-cols-2 items-center gap-5 border-gray-300 border-t p-5"
+	>
 		<button
 			class="border border-gray-300 text-black py-3 text-sm rounded-md"
 			type="button"
 			on:click={() => window.history.back()}>Cancel</button
 		>
-		<button class="bg-black text-white py-3 text-sm rounded-md" type="submit">Create</button>
+		<button
+			class="bg-black text-white py-3 text-sm rounded-md"
+			type="submit"
+			{disabled}
+			class:disabled>{label}</button
+		>
 	</div>
 </form>
+
+<style>
+	.disabled {
+		@apply opacity-20;
+	}
+</style>

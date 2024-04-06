@@ -40,7 +40,7 @@
 
 <QueryClientProvider client={queryClient}>
 	<header
-		class="fixed top-0 left-0 right-0 h-16 border-b bg-white flex items-center justify-between px-3 gap-5"
+		class="fixed top-0 left-0 right-0 h-16 border-b bg-white flex items-center justify-between px-3 gap-5 z-40"
 	>
 		{#if showBackButton}
 			<button

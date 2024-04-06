@@ -3,3 +3,4 @@ export { useCompleteData } from './src/useCompleteData';
 export { useInfiniteData } from './src/useInfiniteData';
 export { useAddData } from './src/useAddData';
 export { useDeleteData } from './src/useDeleteData';
+export { useUpdateData } from './src/useUpdateData';

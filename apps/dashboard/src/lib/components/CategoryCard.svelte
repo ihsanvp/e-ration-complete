@@ -24,6 +24,7 @@
 	{/if}
 	<div class="flex items-center gap-5 mt-5">
 		<button
+			on:click={() => goto(`/app/categories/${data.id}/edit`)}
 			class="flex-1 bg-black text-white py-3 text-sm rounded-md font-medium flex items-center justify-center gap-3"
 		>
 			<Icon width={20} class="-ml-3" icon="material-symbols:edit" />

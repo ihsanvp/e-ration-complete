@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CategoryItemJson, ItemJson } from '@e-ration/database';
 	import Switch from './Switch.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	interface ManagerItem extends ItemJson {
 		quantity: number | undefined;
@@ -8,6 +9,8 @@
 	}
 
 	export let items: ManagerItem[];
+
+	const dispatch = createEventDispatcher();
 
 	function handleSwitchChange(item: ItemJson, state: boolean) {
 		items = items.map((i) => {
@@ -19,6 +22,7 @@
 			}
 			return i;
 		});
+		dispatch('change');
 	}
 
 	function handleQuantityChange(item: ItemJson, value: string) {
@@ -31,6 +35,7 @@
 			}
 			return i;
 		});
+		dispatch('change');
 	}
 
 	export function getData(): CategoryItemJson[] {

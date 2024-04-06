@@ -13,4 +13,4 @@
 </script>
 
 <ActionLoader action={addCategory} successMessage="New category successfully created" />
-<CategoryForm items={data.items} on:submit={(e) => $addCategory.mutate(e.detail)} />
+<CategoryForm label="Create" items={data.items} on:submit={(e) => $addCategory.mutate(e.detail)} />
