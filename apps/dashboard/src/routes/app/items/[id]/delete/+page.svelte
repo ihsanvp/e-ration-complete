@@ -14,7 +14,7 @@
 </script>
 
 <ActionLoader action={deleteItem} successMessage="Successfully deleted Item" />
-<div class="flex flex-col h-[calc(100vh_-_theme(space.16))]">
+<div class="flex flex-col">
 	<div class="flex-1 overflow-y-scroll">
 		<h2 class="text-center font-medium text-3xl px-5 py-10">Are you sure to delete this item?</h2>
 		<div class=" p-5">
@@ -37,7 +37,9 @@
 			</div>
 		{/if}
 	</div>
-	<div class="grid grid-cols-2 items-center gap-5 mt-5 border-gray-300 border-t p-5">
+	<div
+		class="fixed bottom-0 left-0 right-0 bg-white z-10 grid grid-cols-2 items-center gap-5 mt-5 border-gray-300 border-t p-5"
+	>
 		<button
 			class="bg-black text-white py-3 text-sm font-medium rounded-md"
 			on:click={() => window.history.back()}>Cancel</button
