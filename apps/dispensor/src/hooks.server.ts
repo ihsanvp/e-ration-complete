@@ -20,7 +20,7 @@ export async function handle({ event, resolve }) {
 		if (user) {
 			event.locals.user = user.toJson();
 		}
-		if (!user || user.category == null) {
+		if (!user || user.category == null || user.rationNumber == null) {
 			if (event.url.pathname != '/register' && event.url.pathname != '/api/auth/register') {
 				throw redirect(307, '/register');
 			}

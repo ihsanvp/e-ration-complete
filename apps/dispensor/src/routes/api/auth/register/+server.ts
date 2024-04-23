@@ -8,7 +8,7 @@ import { z } from 'zod';
 const schema = z.object({
 	id: z.string().optional(),
 	name: z.string(),
-	location: z.string(),
+	rationNumber: z.string(),
 	category: z.object({
 		id: z.string(),
 		name: z.string()
@@ -32,14 +32,14 @@ export async function POST(event) {
 	if (data.id) {
 		const user = await repo.findById(data.id);
 		user.name = data.name;
-		user.location = data.location;
+		user.rationNumber = data.rationNumber;
 		user.category = data.category;
 		await repo.update(user);
 	} else {
 		const user = User.fromJson({
 			id: session.uid,
 			name: data.name,
-			location: data.location,
+			rationNumber: data.rationNumber,
 			phoneNumber: firebaseUser.phoneNumber!,
 			category: data.category,
 			created: new Date().toISOString()

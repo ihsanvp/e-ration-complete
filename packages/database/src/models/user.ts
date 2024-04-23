@@ -8,7 +8,7 @@ type CategoryType = {
 export interface IUser {
   id: string;
   name: string;
-  location: string;
+  rationNumber: string;
   phoneNumber: string;
   category: CategoryType | null;
   created: string;
@@ -18,7 +18,7 @@ export interface IUser {
 export class User {
   id!: string;
   name!: string;
-  location!: string;
+  rationNumber!: string;
   phoneNumber!: string;
   category!: CategoryType | null;
   created!: Date;
@@ -27,7 +27,7 @@ export class User {
     return {
       id: this.id,
       name: this.name,
-      location: this.location,
+      rationNumber: this.rationNumber,
       phoneNumber: this.phoneNumber,
       category: this.category,
       created: this.created.toISOString()
@@ -38,7 +38,7 @@ export class User {
     const user = new User();
     user.id = data.id;
     user.name = data.name;
-    user.location = data.location;
+    user.rationNumber = data.rationNumber;
     user.phoneNumber = data.phoneNumber;
     user.category = data.category;
     user.created = new Date(data.created);

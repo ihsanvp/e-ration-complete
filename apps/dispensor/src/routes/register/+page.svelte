@@ -12,7 +12,7 @@
 	interface Data {
 		id: string | undefined;
 		name: string;
-		location: string;
+		rationNumber: string;
 		category: {
 			id: string;
 			name: string;
@@ -21,7 +21,7 @@
 
 	let toast: Toast;
 	let name: string = data.user ? data.user.name : '';
-	let location: string = data.user ? data.user.location : '';
+	let rationNumber: string = data.user ? data.user.rationNumber : '';
 	let category: string = data.user ? data.user.category : '';
 
 	const request = useFetch<Data, void, Error>({
@@ -44,7 +44,7 @@
 	function handleSubmit() {
 		request.start({
 			name,
-			location,
+			rationNumber,
 			category: data.categories.find((c) => c.id == category)!,
 			id: data.user ? data.user.id : undefined
 		});
@@ -69,14 +69,17 @@
 				/>
 			</div>
 			<div class="w-full flex flex-col items-start justify-center">
-				<label for="profile__address" class="mb-2">Location</label>
+				<label for="profile__ration_no" class="mb-2">Ration Number</label>
 				<input
-					bind:value={location}
-					id="profile__address"
-					name="location"
+					bind:value={rationNumber}
+					id="profile__ration_no"
+					name="ration_no"
 					required
 					class="w-full"
-					type="text"
+					pattern={`[0-9]{10}`}
+					maxlength="10"
+					type="tel"
+					placeholder="Enter 10 digit ration number"
 				/>
 			</div>
 			<div class="w-full flex flex-col items-start justify-center">
