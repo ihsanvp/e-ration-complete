@@ -22,7 +22,7 @@
 	let toast: Toast;
 	let name: string = data.user ? data.user.name : '';
 	let rationNumber: string = data.user ? data.user.rationNumber : '';
-	let category: string = data.user ? data.user.category : '';
+	let category: string = data.user ? (data.user.category ? data.user.category.id : '') : '';
 
 	const request = useFetch<Data, void, Error>({
 		updateSuccess: false,
