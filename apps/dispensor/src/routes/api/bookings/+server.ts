@@ -33,9 +33,10 @@ export async function POST({ request }) {
 	}
 	const booking2 = Booking2.fromJson({
 		id: booking.id,
-		category: booking.category.name,
-		items: data.items,
-		created: booking.created.toISOString()
+		items: data.items.map((item) => ({
+			name: item.name,
+			ltr: item.quantity
+		}))
 	});
 	await getBooking2Repository().create(booking2);
 	return json(booking);

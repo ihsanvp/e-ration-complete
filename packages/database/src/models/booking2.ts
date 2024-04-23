@@ -1,35 +1,32 @@
 import { Collection } from 'fireorm';
 import { CategoryItemJson } from './category';
 
+interface Booking2Item {
+  name: string;
+  ltr: number;
+}
+
 export interface IBooking2 {
   id: string;
-  category: string;
-  items: CategoryItemJson[];
-  created: string;
+  items: Booking2Item[];
 }
 
 @Collection('Bookings2')
 export class Booking2 {
   id!: string;
-  category!: string;
-  items!: CategoryItemJson[];
-  created!: Date;
+  items!: Booking2Item[];
 
   toJson(): IBooking2 {
     return {
       id: this.id,
-      category: this.category,
-      items: this.items,
-      created: this.created.toISOString()
+      items: this.items
     };
   }
 
   static fromJson(data: IBooking2): Booking2 {
     const booking = new Booking2();
     booking.id = data.id;
-    booking.category = data.category;
     booking.items = data.items;
-    booking.created = new Date(data.created);
     return booking;
   }
 }
