@@ -1,4 +1,5 @@
 import { Collection, ISubCollection, SubCollection } from 'fireorm';
+import { ItemType } from './item';
 
 export interface CategoryJson {
   id: string;
@@ -11,6 +12,7 @@ export interface CategoryItemJson {
   id: string;
   name: string;
   unit: string;
+  type: ItemType;
   quantity: number;
 }
 
@@ -18,6 +20,7 @@ export class CategoryItem {
   id!: string;
   name!: string;
   unit!: string;
+  type!: ItemType;
   quantity!: number;
 
   toJson(): CategoryItemJson {
@@ -25,6 +28,7 @@ export class CategoryItem {
       id: this.id,
       name: this.name,
       unit: this.unit,
+      type: this.type,
       quantity: this.quantity
     };
   }
@@ -34,6 +38,7 @@ export class CategoryItem {
     item.id = data.id;
     item.name = data.name;
     item.unit = data.unit;
+    item.type = data.type;
     item.quantity = data.quantity;
     return item;
   }

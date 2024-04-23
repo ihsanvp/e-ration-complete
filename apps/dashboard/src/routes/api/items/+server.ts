@@ -28,7 +28,8 @@ export async function GET({ url }) {
 
 const schema = z.object({
 	name: z.string(),
-	unit: z.string()
+	unit: z.string(),
+	type: z.enum(['solid', 'liquid'] as const)
 });
 
 /** @type {import("./$types").RequestHandler} */

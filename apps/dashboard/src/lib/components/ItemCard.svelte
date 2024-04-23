@@ -21,8 +21,9 @@
 	});
 </script>
 
-<button type="button" use:melt={$trigger} class="grid grid-cols-6 gap-3 p-3 border rounded-md">
+<button type="button" use:melt={$trigger} class="grid grid-cols-8 gap-3 p-3 border rounded-md">
 	<div class="col-span-4 flex items-start text-left capitalize">{data.name}</div>
+	<div class="col-span-2 flex capitalize">{data.type}</div>
 	<div class="col-span-1 flex capitalize">{data.unit}</div>
 	<div class="col-span-1 flex justify-end items-center pt-1">
 		<Icon icon="mi:options-vertical" />

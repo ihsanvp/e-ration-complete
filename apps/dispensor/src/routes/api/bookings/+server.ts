@@ -19,6 +19,7 @@ const schema = z.object({
 			id: z.string(),
 			name: z.string(),
 			unit: z.string(),
+			type: z.enum(['solid', 'liquid'] as const),
 			quantity: z.number()
 		})
 	)
@@ -35,7 +36,8 @@ export async function POST({ request }) {
 		id: booking.id,
 		items: data.items.map((item) => ({
 			name: item.name,
-			ltr: item.quantity
+			ltr: item.type == 'liquid' ? item.quantity : undefined,
+			quantity: item.type == 'solid' ? item.quantity : undefined
 		}))
 	});
 	await getBooking2Repository().create(booking2);

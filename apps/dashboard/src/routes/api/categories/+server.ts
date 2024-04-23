@@ -34,6 +34,7 @@ const schema = z.object({
 			id: z.string(),
 			name: z.string(),
 			unit: z.string(),
+			type: z.enum(['solid', 'liquid'] as const),
 			quantity: z.number()
 		})
 	)

@@ -5,7 +5,7 @@
 
 	interface Data {
 		name: string;
-		items: CategoryItemJson[];
+		items?: CategoryItemJson[];
 	}
 
 	export let label: string;
@@ -40,6 +40,9 @@
 
 	function createManagerItems() {
 		if (initial) {
+			if (!initial.items) {
+				initial.items = [];
+			}
 			return items.map((item) => {
 				const matched = initial.items?.find((i) => i.id == item.id);
 				if (matched) {

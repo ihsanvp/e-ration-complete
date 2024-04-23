@@ -28,6 +28,7 @@ class CustomItemRepository extends BaseFirestoreRepository<Item> {
     const item = new Item();
     (item.id = `item__${data.name}`), (item.name = data.name);
     item.unit = data.unit;
+    item.type = data.type;
     item.created = new Date();
     return await this.create(item);
   }

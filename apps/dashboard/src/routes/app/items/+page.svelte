@@ -23,8 +23,9 @@
 		<AddButton onClick={() => goto('/app/items/create')} />
 	</svelte:fragment>
 	<svelte:fragment slot="header">
-		<div class="grid grid-cols-6 border-b sticky px-5 py-4 bg-white top-36 items-center">
+		<div class="grid grid-cols-8 border-b sticky px-5 py-4 bg-white top-36 items-center">
 			<div class="text-lg font-medium col-span-4">Name</div>
+			<div class="text-lg font-medium col-span-2">Type</div>
 			<div class="text-lg font-medium col-span-1">Unit</div>
 		</div>
 	</svelte:fragment>

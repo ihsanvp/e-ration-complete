@@ -26,6 +26,7 @@ function getFirebaseAdminApp(config: ConnectionConfig): admin.app.App {
 function getFirestoreAdminApp(config: ConnectionConfig): admin.firestore.Firestore {
   if (!firestoreAdminApp) {
     firestoreAdminApp = getFirebaseAdminApp(config).firestore();
+    firestoreAdminApp.settings({ ignoreUndefinedProperties: true });
   }
   return firestoreAdminApp;
 }

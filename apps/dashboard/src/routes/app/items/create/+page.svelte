@@ -2,10 +2,11 @@
 	import ItemForm from '$lib/components/ItemForm.svelte';
 	import ActionLoader from '$lib/components/ActionLoader.svelte';
 	import { useAddData } from '@e-ration/hooks';
-	import type { ItemJson } from '@e-ration/database';
+	import type { ItemJson, ItemType } from '@e-ration/database';
 
 	interface Data {
 		name: string;
+		type: ItemType;
 		unit: string;
 	}
 

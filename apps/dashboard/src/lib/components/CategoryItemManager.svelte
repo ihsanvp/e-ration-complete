@@ -45,6 +45,7 @@
 				id: item.id,
 				name: item.name,
 				unit: item.unit,
+				type: item.type,
 				quantity: item.quantity ?? 0
 			}));
 	}
@@ -61,7 +62,7 @@
 				<input
 					value={item.quantity}
 					on:change={(e) => handleQuantityChange(item, e.currentTarget.value)}
-					class="w-10 text-center"
+					class="w-10 text-center px-0"
 					type="number"
 					required={item.selected}
 					disabled={!item.selected}

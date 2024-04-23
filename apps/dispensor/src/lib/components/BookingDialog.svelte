@@ -33,6 +33,7 @@
 			});
 		} catch (err) {
 			alert(err);
+			window.location.reload();
 		} finally {
 			loading = false;
 		}

@@ -1,28 +1,40 @@
 <script lang="ts">
+	import type { ItemType } from '@e-ration/database';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher<Events>();
 
 	interface Events {
-		submit: Data;
+		submit: SubmitData;
 	}
 
 	interface Data {
 		name: string;
 		unit: string;
+		type: string;
+	}
+
+	interface SubmitData extends Data {
+		type: ItemType;
 	}
 
 	export let initial: Data = {
 		name: '',
-		unit: ''
+		unit: '',
+		type: ''
 	};
 
 	let name: string = initial.name;
 	let unit: string = initial.unit;
+	let type: string = initial.type ?? '';
 
 	function onSubmit() {
 		if (name && unit) {
-			dispatch('submit', { name: name.toLowerCase(), unit: unit.toLowerCase() });
+			dispatch('submit', {
+				name: name.toLowerCase(),
+				unit: unit.toLowerCase(),
+				type: type as ItemType
+			});
 		}
 	}
 </script>
@@ -32,6 +44,14 @@
 		<label for="add-item__name">
 			<p class="mb-2">Name</p>
 			<input bind:value={name} required class="w-full rounded-md" type="text" id="add-item__name" />
+		</label>
+		<label for="add-item__type">
+			<p class="mb-2">Type</p>
+			<select bind:value={type} required class="w-full rounded-md" id="add-item__type">
+				<option disabled selected value>------</option>
+				<option value="solid">Solid</option>
+				<option value="liquid">Liquid</option>
+			</select>
 		</label>
 		<label for="add-item__unit">
 			<p class="mb-2">Unit</p>

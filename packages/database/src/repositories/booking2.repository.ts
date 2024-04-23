@@ -1,11 +1,10 @@
 import { BaseFirestoreRepository, CustomRepository, IWherePropParam, getRepository } from 'fireorm';
-import { CategoryItemJson } from '../models/category';
 import { generateBookingId } from '../helpers/fields';
-import { Booking2 } from '../models/booking2';
+import { Booking2, type Booking2Item } from '../models/booking2';
 
 interface CreateFromData {
   category: string;
-  items: CategoryItemJson[];
+  items: Booking2Item[];
 }
 
 @CustomRepository(Booking2)
@@ -13,9 +12,7 @@ export class Booking2Repository extends BaseFirestoreRepository<Booking2> {
   async createFromData(data: CreateFromData): Promise<Booking2 | null> {
     let booking = Booking2.fromJson({
       id: await generateBookingId(this),
-      category: data.category,
-      items: data.items,
-      created: new Date().toISOString()
+      items: data.items
     });
     return await this.create(booking);
   }

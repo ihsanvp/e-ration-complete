@@ -32,6 +32,7 @@ const schema = z.object({
 			id: z.string(),
 			name: z.string(),
 			unit: z.string(),
+			type: z.enum(['solid', 'liquid'] as const),
 			quantity: z.number()
 		})
 	)
@@ -57,6 +58,7 @@ export async function POST({ params, request }) {
 		if (item) {
 			item.name = itemData.name;
 			item.quantity = itemData.quantity;
+			item.type = itemData.type;
 			item.unit = itemData.unit;
 			await category.items.update(item);
 		} else {

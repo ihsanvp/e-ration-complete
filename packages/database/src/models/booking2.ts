@@ -1,9 +1,10 @@
 import { Collection } from 'fireorm';
 import { CategoryItemJson } from './category';
 
-interface Booking2Item {
+export interface Booking2Item {
   name: string;
-  ltr: number;
+  ltr: number | undefined;
+  quantity: number | undefined;
 }
 
 export interface IBooking2 {
